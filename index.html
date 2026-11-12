@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navodaya | Life Compass</title>
+<style>
+:root{--ink:#172b28;--muted:#657671;--cream:#f7f6ef;--paper:#fffefa;--green:#245b4b;--mint:#dcebe1;--lime:#d8edaa;--line:#e6e8df;--gold:#d8a84e}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}.app{max-width:1120px;margin:auto;min-height:100vh;padding:22px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:8px 2px 22px}.brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.04em}.logo{width:38px;height:38px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center;font-size:20px}.tag{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.layout{display:grid;grid-template-columns:225px 1fr;gap:22px}.side{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:18px;height:max-content;position:sticky;top:16px}.side small{color:var(--muted);font-weight:700;letter-spacing:.1em}.nav{display:flex;gap:11px;align-items:center;padding:12px 10px;margin-top:7px;border-radius:12px;color:var(--muted);font-size:14px}.nav.active{background:var(--mint);color:var(--green);font-weight:700}.main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{background:var(--green);color:white;border-radius:26px;padding:36px;position:relative;overflow:hidden}.hero:after{content:"✳";position:absolute;right:34px;top:8px;font-size:150px;color:#ffffff12}.eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#cfe4d4;font-weight:700}.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.05;max-width:650px;margin:15px 0}.hero p{color:#e0eee5;max-width:580px;line-height:1.65}.btn{border:0;border-radius:12px;padding:13px 18px;background:var(--lime);color:var(--ink);font-weight:800;cursor:pointer}.btn.dark{background:var(--green);color:white}.btn.ghost{background:white;border:1px solid var(--line);color:var(--ink)}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.sectionhead{display:flex;justify-content:space-between;align-items:end;margin:28px 0 13px}.sectionhead h2{margin:0;font-size:21px}.sectionhead p{margin:4px 0 0;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px}.card h3{margin:8px 0}.card p{color:var(--muted);line-height:1.55;font-size:14px;margin:5px 0}.icon{font-size:24px}.pill{display:inline-block;background:var(--mint);color:var(--green);border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800}.progress{height:7px;background:#e9eee8;border-radius:20px;overflow:hidden;margin:12px 0}.progress span{display:block;height:100%;width:18%;background:var(--green);border-radius:20px}.question{font-size:24px;line-height:1.25;margin:10px 0 18px}.choices{display:grid;gap:10px}.choice{border:1px solid var(--line);background:white;padding:15px;border-radius:13px;text-align:left;cursor:pointer;color:var(--ink)}.choice:hover,.choice.selected{border-color:var(--green);background:var(--mint)}.muted{color:var(--muted)}.chatbox{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;min-height:180px}.bubble{padding:13px 15px;border-radius:15px;max-width:85%;margin:9px 0;line-height:1.5;font-size:14px}.bot{background:var(--mint)}.user{background:#f1f0e9;margin-left:auto}.inputrow{display:flex;gap:8px;margin-top:12px}.inputrow input{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:13px}.result{border-left:3px solid var(--gold);padding:2px 0 2px 14px;margin:14px 0}.step{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.num{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--mint);color:var(--green);font-weight:800}.foot{color:var(--muted);font-size:11px;line-height:1.5;margin-top:24px}
+@media(max-width:760px){.app{padding:14px}.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto;gap:4px;padding:8px}.side small{display:none}.nav{white-space:nowrap;margin:0;padding:10px}.hero{padding:26px}.grid{grid-template-columns:1fr}.hero:after{right:5px;font-size:100px}.top{padding-bottom:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">✳</div><div>NAVODAYA<div class="tag">Your life compass</div></div></div>
+    <div class="pill">PROTOTYPE · 01</div>
+  </header>
+  <div class="layout">
+    <aside class="side">
+      <small>YOUR JOURNEY</small>
+      <div class="nav active" data-go="home">⌂ &nbsp; Overview</div>
+      <div class="nav" data-go="discover">◉ &nbsp; Discover yourself</div>
+      <div class="nav" data-go="companion">✧ &nbsp; AI companion</div>
+      <div class="nav" data-go="directions">⌁ &nbsp; Possible directions</div>
+      <div class="nav" data-go="roadmap">↗ &nbsp; Your next steps</div>
+    </aside>
+    <main class="main">
+      <section id="home" class="screen active">
+        <div class="hero">
+          <div class="eyebrow">A little more clarity, one step at a time</div>
+          <h1>Your life is not a multiple-choice question.</h1>
+          <p>Navodaya helps you understand yourself, explore possible paths and test them in the real world. No labels. No destiny predictions. Just thoughtful discovery that turns into action.</p>
+          <button class="btn" onclick="go('discover')">Begin my discovery →</button>
+        </div>
+        <div class="sectionhead"><div><h2>Four parts of a meaningful life</h2><p>Explore at your own pace. Your journey can change as you do.</p></div></div>
+        <div class="grid">
+          <div class="card"><div class="icon">🧠</div><h3>Know yourself</h3><p>Values, interests, strengths, motivations and patterns.</p><span class="pill">DISCOVER</span></div>
+          <div class="card"><div class="icon">🧭</div><h3>Explore direction</h3><p>Career and life possibilities worth investigating.</p><span class="pill">EXPLORE</span></div>
+          <div class="card"><div class="icon">🌱</div><h3>Build yourself</h3><p>Skills, habits and small experiments that create evidence.</p><span class="pill">GROW</span></div>
+          <div class="card"><div class="icon">❤️</div><h3>Live with meaning</h3><p>Connect your goals with people, contribution and wellbeing.</p><span class="pill">CONTRIBUTE</span></div>
+        </div>
+        <div class="sectionhead"><div><h2>Your starting point</h2><p>A first reflection, not a test you can pass or fail.</p></div></div>
+        <div class="card"><h3>What would you most like more clarity about?</h3><div class="row" style="margin-top:14px"><button class="btn ghost" onclick="go('discover')">My career</button><button class="btn ghost" onclick="go('discover')">My strengths</button><button class="btn ghost" onclick="go('discover')">My purpose</button><button class="btn ghost" onclick="go('discover')">My next chapter</button></div></div>
+      </section>
+
+      <section id="discover" class="screen">
+        <div class="sectionhead"><div><span class="pill">DISCOVERY · STEP 1 OF 3</span><h2 style="margin-top:12px">Start with what matters to you.</h2><p>Choose the answer that feels closest today. You can change your mind later.</p></div></div>
+        <div class="card">
+          <div class="progress"><span id="bar"></span></div>
+          <div class="muted" id="counter" style="font-size:12px;font-weight:700">QUESTION 1 OF 3</div>
+          <div class="question" id="qtext">Which kind of activity gives you the most energy?</div>
+          <div class="choices" id="choices"></div>
+          <div class="row" style="justify-content:space-between;margin-top:18px"><button class="btn ghost" onclick="prevQ()">← Back</button><button class="btn dark" id="next" onclick="nextQ()" disabled>Continue →</button></div>
+        </div>
+        <p class="foot">This short exercise is a reflection prompt, not a validated psychological assessment or a diagnosis. A fuller discovery process would combine validated tools, conversation and real-world evidence.</p>
+      </section>
+
+      <section id="companion" class="screen">
+        <div class="sectionhead"><div><span class="pill">AI LIFE COMPANION · DEMO</span><h2 style="margin-top:12px">A conversation that starts with you.</h2><p>Try a prompt. This prototype uses a small scripted demo, not a connected AI model.</p></div></div>
+        <div class="chatbox" id="chat">
+          <div class="bubble bot">Welcome. You don't need to have your life figured out. What has been on your mind lately?</div>
+        </div>
+        <div class="inputrow"><input id="chatinput" placeholder="Type what's on your mind..." onkeydown="if(event.key==='Enter')sendChat()"><button class="btn dark" onclick="sendChat()">Send</button></div>
+        <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="quick('I feel confused about my career.')">I'm confused about my career</button><button class="btn ghost" onclick="quick('I don't know what I'm good at.')">I don't know my strengths</button></div>
+      </section>
+
+      <section id="directions" class="screen">
+        <div class="sectionhead"><div><span class="pill">EXPLORE, DON'T LABEL</span><h2 style="margin-top:12px">Possible directions</h2><p>Illustrative pathways based on common interests. Not personal recommendations yet.</p></div></div>
+        <div class="grid">
+          <div class="card"><div class="icon">🔬</div><h3>Research & discovery</h3><p>For people energised by questions, evidence, investigation and solving complex problems.</p><div class="result"><b>Try:</b> Read one accessible research paper and explain its central question to a friend.</div></div>
+          <div class="card"><div class="icon">🤝</div><h3>People & support</h3><p>For people drawn to listening, teaching, guiding, caring or helping others progress.</p><div class="result"><b>Try:</b> Mentor someone for one week and reflect on which parts felt meaningful.</div></div>
+          <div class="card"><div class="icon">🛠️</div><h3>Building & creating</h3><p>For people who enjoy making things, improving systems and turning ideas into useful products.</p><div class="result"><b>Try:</b> Build a tiny solution to one everyday problem.</div></div>
+          <div class="card"><div class="icon">🌍</div><h3>Community & impact</h3><p>For people motivated by social problems, collaboration and making a difference at scale.</p><div class="result"><b>Try:</b> Volunteer in a local initiative and observe what role suits you.</div></div>
+        </div>
+      </section>
+
+      <section id="roadmap" class="screen">
+        <div class="sectionhead"><div><span class="pill">YOUR FIRST 7 DAYS</span><h2 style="margin-top:12px">Turn reflection into evidence.</h2><p>A gentle starter plan. Small actions beat grand declarations.</p></div></div>
+        <div class="card">
+          <div class="step"><div class="num">1</div><div><b>Notice</b><p class="muted">For two days, note activities that give you energy or drain it.</p></div></div>
+          <div class="step"><div class="num">2</div><div><b>Ask</b><p class="muted">Ask two people who know you well: “When have you seen me at my best?”</p></div></div>
+          <div class="step"><div class="num">3</div><div><b>Explore</b><p class="muted">Choose one possible direction and speak to someone doing that work.</p></div></div>
+          <div class="step"><div class="num">4</div><div><b>Experiment</b><p class="muted">Try one small, low-risk activity related to that direction.</p></div></div>
+          <div class="step"><div class="num">5</div><div><b>Reflect</b><p class="muted">What surprised you? What felt engaging? What would you change?</p></div></div>
+          <div class="row" style="margin-top:18px"><button class="btn dark" onclick="window.print()">Save / print my starter plan</button><button class="btn ghost" onclick="go('discover')">Continue discovery</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const questions=[
+ {q:"Which kind of activity gives you the most energy?",a:["Solving a difficult problem or understanding how something works","Helping, teaching or supporting another person","Creating, designing or building something","Organising people or making a plan happen","Exploring ideas, places or unfamiliar experiences"]},
+ {q:"What matters most when you imagine a satisfying working life?",a:["Learning and intellectual challenge","Helping people or contributing to society","Freedom, creativity and independence","Stability, mastery and clear progress","Leadership, influence and building something substantial"]},
+ {q:"When faced with a free afternoon, what are you most likely to choose?",a:["Read, research or learn something new","Meet someone and have a meaningful conversation","Make or improve something","Plan a goal and work towards it","Try something new or explore outdoors"]}
+];
+let qi=0, answers=[];
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.go===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='discover')renderQ();}
+document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>go(n.dataset.go)));
+function renderQ(){let q=questions[qi];document.getElementById('qtext').textContent=q.q;document.getElementById('counter').textContent=`QUESTION ${qi+1} OF ${questions.length}`;document.getElementById('bar').style.width=((qi+1)/questions.length*100)+'%';document.getElementById('choices').innerHTML=q.a.map((a,i)=>`<button class="choice ${answers[qi]===i?'selected':''}" onclick="pick(${i})">${a}</button>`).join('');document.getElementById('next').disabled=answers[qi]===undefined;document.getElementById('next').textContent=qi===2?'See my reflection →':'Continue →';}
+function pick(i){answers[qi]=i;renderQ();}
+function prevQ(){if(qi>0){qi--;renderQ()}else go('home')}
+function nextQ(){if(answers[qi]===undefined)return;if(qi<2){qi++;renderQ()}else{let labels=['problem-solving','supporting people','creating and building','organising and leading','exploring and learning'];let counts={};answers.forEach(a=>counts[labels[a]]=(counts[labels[a]]||0)+1);let top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];document.getElementById('qtext').textContent='A first pattern to explore: '+top+'.';document.getElementById('choices').innerHTML=`<div class="card"><h3>Your reflection, not a verdict</h3><p>Your choices suggest that <b>${top}</b> may be worth exploring. This is only a starting hypothesis from three questions. It is not a personality type or a career recommendation.</p><p><b>Next experiment:</b> Choose one small activity that lets you experience this pattern in real life. Notice whether it energises you, and why.</p></div><button class="choice" onclick="go('companion')">Talk this through with your AI companion →</button>`;document.getElementById('counter').textContent='YOUR FIRST REFLECTION';document.getElementById('next').textContent='Start again';document.getElementById('next').disabled=false;document.getElementById('next').onclick=()=>{qi=0;answers=[];document.getElementById('next').onclick=nextQ;renderQ()};}}
+function addBubble(txt,who){let b=document.createElement('div');b.className='bubble '+who;b.textContent=txt;document.getElementById('chat').appendChild(b);b.scrollIntoView({block:'nearest',behavior:'smooth'});}
+function sendChat(){let input=document.getElementById('chatinput');let t=input.value.trim();if(!t)return;addBubble(t,'user');input.value='';setTimeout(()=>addBubble("Thank you for sharing that. Let's get curious rather than rush to a label: can you remember one recent moment when you felt engaged, useful or genuinely interested? What were you doing, and what part of it mattered to you?",'bot'),350);}
+function quick(t){document.getElementById('chatinput').value=t;sendChat();}
+</script>
+</body>
+</html>
