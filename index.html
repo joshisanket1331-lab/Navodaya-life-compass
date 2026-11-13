@@ -268,11 +268,11 @@ buildPrompts();updateHome();renderQ();
  }
  function resize(){if(!renderer)return;const c=$('journey3d'),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
  function animate(){
-  raf=requestAnimationFrame(animate);if(!renderer||!avatar)return;const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.05);
-  currentT+=(targetT-currentT)*Math.min(1,dt*1.5);
+  raf=requestAnimationFrame(animate);if(!renderer||!avatar)return;const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+  currentT+=(targetT-currentT)*Math.min(1,dt*2.2);
   const p=curve.getPointAt(currentT),tan=curve.getTangentAt(currentT);avatar.position.set(p.x,.08,p.z);avatar.rotation.y=Math.atan2(-tan.x,-tan.z);
   const moving=Math.abs(targetT-currentT)>.003,walk=Math.sin(t*8)*(moving?.55:.035);avatar.userData.legs.forEach((l,i)=>l.rotation.x=walk*(i===0?1:-1));avatar.userData.arms.forEach((a,i)=>a.rotation.x=-walk*(i===0?1:-1));
-  const behind=new THREE.Vector3(p.x-tan.x*8,4.7,p.z-tan.z*8);camera.position.lerp(behind,.045);const look=new THREE.Vector3(p.x+tan.x*4,1.65,p.z+tan.z*4);camera.lookAt(look);
+  const behind=new THREE.Vector3(p.x-tan.x*8,4.7,p.z-tan.z*8);camera.position.lerp(behind,.085);const look=new THREE.Vector3(p.x+tan.x*4,1.65,p.z+tan.z*4);camera.lookAt(look);
   markers.forEach((m,i)=>{m.userData.ring.rotation.z=t*.6;m.userData.orb.position.y=1.65+Math.sin(t*1.8+i)*.13;const on=i===selected;m.scale.setScalar(on?1+Math.sin(t*3)*.045:1);m.children[2].material.emissiveIntensity=on?2.8:.9;});
   renderer.render(scene,camera);
  }
