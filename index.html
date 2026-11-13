@@ -288,7 +288,7 @@ buildPrompts();updateHome();renderQ();
   const moving=Math.abs(targetT-currentT)>.001;if(mixer)mixer.update(dt);
   if(walkAction&&idleAction){if(moving){idleAction.stop();if(!walkAction.isRunning())walkAction.reset().play();}else{walkAction.stop();if(!idleAction.isRunning())idleAction.reset().play();}}
   else if(walkAction){if(moving){if(!walkAction.isRunning())walkAction.reset().play();}else walkAction.stop();}
-  camera.position.x+=(p.x-tan.x*7-camera.position.x)*.055;camera.position.y+=(5.8-camera.position.y)*.035;
+  camera.position.x+=(p.x-tan.x*7-camera.position.x)*.055;camera.position.y+=(5.8-camera.position.y)*.035;camera.position.z=42+(p.z-19)*.78;
   camera.lookAt(p.x+tan.x*5,1.25,p.z-18);
   markers.forEach((m,i)=>{m.userData.ring.rotation.z=t*.6;m.userData.orb.position.y=1.65+Math.sin(t*1.8+i)*.13;const on=i===selected;m.scale.setScalar(on?1+Math.sin(t*3)*.045:1);m.children[2].material.emissiveIntensity=on?2.8:.9;});
   renderer.render(scene,camera);
