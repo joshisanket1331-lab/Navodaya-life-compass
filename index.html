@@ -9,48 +9,89 @@
 @media(max-width:760px){.app{padding:12px}.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto;gap:3px;padding:7px}.side small{display:none}.nav{white-space:nowrap;margin:0;padding:10px}.grid{grid-template-columns:1fr}.hero{padding:26px}.hero:after{right:5px}.barrow{grid-template-columns:115px 1fr 22px}}
 @media print{body{background:white}.side,.top,.btn,.foot{display:none!important}.layout{display:block}.screen{display:none!important}#report{display:block!important}.card{box-shadow:none}}
 
-/* NAVODAYA V3: JOURNEY WORLD */
-.journey-shell{background:#eaf0e7;border:1px solid #dbe5d9;border-radius:22px;padding:12px;overflow:hidden}
-.journey-top{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 6px 13px;flex-wrap:wrap}
-.journey-world{height:460px;position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(#a9c8bd,#dce8d5 55%,#7d9b77)}
-.forest-scene{position:absolute;inset:0;width:100%;height:100%;display:block}
-.forest-marker{position:absolute;z-index:4;transform:translate(-50%,-50%);width:38px;height:38px;border:2px solid #f8f4d7;border-radius:50%;background:#e8f4c5;color:#204a37;font-weight:900;box-shadow:0 0 0 5px #e8f4c544,0 4px 14px #102d2080;display:grid;place-items:center;padding:0}
-.forest-marker.locked{background:#aab6a5;color:#41564a;box-shadow:0 0 0 4px #ffffff30}
-.forest-marker.done{background:#f5d98a}
-.forest-marker.selected{outline:3px solid #fff;outline-offset:4px;transform:translate(-50%,-50%) scale(1.12)}
-.forest-marker:focus-visible{outline:3px solid white;outline-offset:5px}
-.forest-glow{animation:forestPulse 2.8s ease-in-out infinite}
-@keyframes forestPulse{50%{filter:drop-shadow(0 0 12px #fff2a8)}}
-.forest-water{animation:waterFlow 3s linear infinite}
-@keyframes waterFlow{to{stroke-dashoffset:-34}}
-.journey-world{touch-action:pan-y}
-.world-hud{position:absolute;left:13px;top:13px;z-index:2;background:#123b32dd;color:white;padding:10px 13px;border-radius:12px;font-size:11px;backdrop-filter:blur(8px)}
-.world-hud b{display:block;font-size:14px;margin-bottom:3px}
-.world-hint{position:absolute;right:13px;top:13px;z-index:2;background:#ffffffdc;color:#24483c;padding:9px 11px;border-radius:12px;font-size:10px}
-.world-caption{position:absolute;left:14px;bottom:13px;z-index:2;background:#123b32df;color:white;padding:10px 13px;border-radius:12px;font-size:11px;max-width:230px}
-.world-caption b{display:block;font-size:13px;margin-bottom:3px}
-.journey-below{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.checkpoint-list{display:grid;gap:7px}
-.checkpoint-button{display:flex;align-items:center;gap:10px;text-align:left;background:#fffefa;border:1px solid #dce5d9;border-radius:12px;padding:10px;color:#19342d}
-.checkpoint-button:disabled{opacity:.55;cursor:not-allowed}
-.checkpoint-button.active{border-color:#205846;background:#e2eee5}
-.checkpoint-button .cp-icon{font-size:20px}
-.checkpoint-button small{display:block;color:#64766f;margin-top:2px}
-.checkpoint-button .cp-state{margin-left:auto;font-size:10px;font-weight:800;color:#205846}
-.journey-detail{background:#fffefa;border:1px solid #dce5d9;border-radius:15px;padding:16px;min-height:220px}
-.journey-detail h3{margin:7px 0}
-.journey-detail p{font-size:13px;line-height:1.6;color:#64766f}
-.journey-detail .btn{margin-top:8px}
-.journey-progress{height:7px;background:#dce5d9;border-radius:20px;overflow:hidden;margin:9px 0}
-.journey-progress span{display:block;height:100%;background:#205846;width:0;transition:width .3s}
-.world-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:#19342d;background:radial-gradient(ellipse at 77% 30%,#effffb 0 3%,#a8e5dc 7%,transparent 20%),linear-gradient(180deg,#8bb9a8 0%,#c4d8b5 42%,#496f4b 100%);isolation:isolate}.world-fallback:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 5% 8%,#153d2b 0 16%,transparent 17%),radial-gradient(ellipse at 95% 3%,#1b4931 0 19%,transparent 20%),radial-gradient(ellipse at 12% 65%,#315f3c 0 15%,transparent 16%),radial-gradient(ellipse at 90% 68%,#315f3c 0 18%,transparent 19%),linear-gradient(90deg,#173e2b55,transparent 35%,transparent 68%,#173e2b55);pointer-events:none;z-index:-1}.world-fallback:after{content:"";position:absolute;left:34%;bottom:-32%;width:38%;height:92%;background:linear-gradient(90deg,#b7a17a,#e1d0a4 48%,#a58e67);clip-path:polygon(43% 0,58% 0,100% 100%,0 100%);transform:rotate(3deg);pointer-events:none;z-index:-1} 
-.world-fallback:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(72deg,transparent 0 9%,#214b3930 9.2% 10%,transparent 10.2% 18%),linear-gradient(90deg,#173e2b55,transparent 32%,transparent 70%,#173e2b55);pointer-events:none}
-.world-fallback:after{content:"";position:absolute;left:35%;bottom:-25%;width:34%;height:90%;background:#c9b58c;clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);transform:rotate(4deg);opacity:.95;pointer-events:none}
-.world-fallback .fallback-inner{position:relative;z-index:1;max-width:340px;background:#ffffffdc;padding:20px;border-radius:16px;box-shadow:0 10px 35px #183c2b35}
-
-.world-fallback .fallback-inner{max-width:340px;background:#ffffffdc;padding:20px;border-radius:16px}
-@media(max-width:650px){.journey-world{height:410px}.journey-below{grid-template-columns:1fr}.world-hint{top:auto;bottom:13px;right:12px}.world-caption{bottom:62px}}
-</style></head>
+/* NAVODAYA V4: IMMERSIVE 3D JOURNEY */
+.journey-shell{position:relative;background:#071b19;border:0;border-radius:0;padding:0;overflow:hidden}
+.journey-top{position:absolute;z-index:8;top:0;left:0;right:0;padding:18px 22px;pointer-events:none;color:#fff;background:linear-gradient(180deg,#061714c9,transparent);align-items:flex-start}
+.journey-top>div,.journey-top>span{pointer-events:auto}
+.journey-top b{font-size:14px!important;letter-spacing:.16em;text-transform:uppercase}
+.journey-top .muted{color:#c3d8ce!important}
+.journey-top .pill{background:#d8edc9;color:#193b2d}
+.journey-world{height:100vh;min-height:590px;position:relative;border-radius:0;overflow:hidden;background:radial-gradient(ellipse at 55% 28%,#8cae9c 0,#375d50 34%,#102c27 75%,#061714 100%)}
+#journey3d{position:absolute;inset:0;width:100%;height:100%;display:block;outline:0}
+.journey-world:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#06171455 0%,transparent 24%,transparent 65%,#0617149c 100%);z-index:1}
+.world-hud{position:absolute;z-index:5;left:22px;top:92px;background:#09241fc9;color:#fff;padding:12px 15px;border:1px solid #d7e9d533;border-radius:14px;backdrop-filter:blur(12px);font-size:11px;max-width:230px}
+.world-hud b{display:block;font-size:13px;letter-spacing:.12em;margin-bottom:4px}
+.world-hint{position:absolute;z-index:5;right:22px;top:92px;background:#09241fae;color:#e9f3e9;border:1px solid #d7e9d533;padding:10px 13px;border-radius:14px;font-size:10px;backdrop-filter:blur(10px)}
+.world-caption{display:none}
+#forest-markers{display:none}
+.journey-below{position:absolute;z-index:7;left:18px;right:18px;bottom:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,390px);gap:12px;align-items:end;margin:0;pointer-events:none}
+.journey-below>div{pointer-events:auto}
+.journey-below>div:first-child{background:#071d19b8;border:1px solid #d9ebdc2e;border-radius:16px;padding:12px;backdrop-filter:blur(14px)}
+.journey-below .eyebrow{color:#d1e3d5;margin:0 0 8px!important}
+.checkpoint-list{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.checkpoint-button{flex:1 0 120px;min-width:0;display:flex;align-items:center;gap:8px;text-align:left;background:#e7eee4ed;border:1px solid #ffffff22;border-radius:12px;padding:10px;color:#17382d}
+.checkpoint-button:disabled{opacity:.38;filter:grayscale(.8)}
+.checkpoint-button.active{background:#d7efc6;border-color:#f5edc1;box-shadow:0 0 0 2px #e6f1c955}
+.checkpoint-button .cp-icon{font-size:18px}
+.checkpoint-button small{display:block;color:#526a5e;margin-top:2px;font-size:10px}
+.checkpoint-button .cp-state{margin-left:auto;font-size:9px;font-weight:850;color:#28563d}
+.journey-detail{background:#f5f2e8f2;border:1px solid #fff9;border-radius:17px;padding:17px 18px;min-height:0;max-height:38vh;overflow:auto;box-shadow:0 15px 50px #0005;backdrop-filter:blur(16px)}
+.journey-detail h3{margin:7px 0 8px;font-size:19px;color:#193a2e}
+.journey-detail p{font-size:12px;line-height:1.55;color:#53665b;margin:7px 0}
+.journey-detail .resultbox{margin:10px 0;border-color:#b99b5c}
+.journey-detail .btn{margin-top:6px}
+.journey-progress{height:5px;background:#ffffff30;border-radius:20px;overflow:hidden;margin:9px 0}
+.journey-progress span{display:block;height:100%;background:#d9efad;width:0;transition:width .3s}
+.journey-shell>div:last-child{position:absolute;z-index:6;top:18px;right:22px;width:155px;padding:0!important;color:white;pointer-events:none}
+.journey-shell>div:last-child .row{justify-content:flex-end!important}
+.journey-shell>div:last-child b,.journey-shell>div:last-child span{color:#fff!important;font-size:10px!important}
+.journey-shell>div:last-child .foot{display:none}
+.journey-shell>div:last-child .journey-progress{background:#ffffff55}
+.journey-shell>div:last-child .journey-progress span{background:#e2f2c7}
+body.journey-mode{overflow:hidden;background:#071b19}
+body.journey-mode .app{max-width:none;width:100%;padding:0;min-height:100vh}
+body.journey-mode .top,body.journey-mode .side,body.journey-mode .app>p.foot{display:none!important}
+body.journey-mode .layout{display:block}
+body.journey-mode .main{width:100%}
+body.journey-mode #roadmap.active{display:block;position:fixed;inset:0;z-index:1000;overflow:hidden;background:#071b19}
+body.journey-mode #roadmap>.sectionhead,body.journey-mode #roadmap>.card,body.journey-mode #roadmap>p.foot{display:none!important}
+body.journey-mode #roadmap .journey-shell{height:100dvh;min-height:100vh}
+.journey-exit{position:absolute;z-index:12;top:17px;left:18px;border:1px solid #ffffff45;background:#071d19a8;color:white;border-radius:30px;padding:9px 13px;font-size:11px;font-weight:750;backdrop-filter:blur(12px)}
+.journey-exit:active{transform:scale(.97)}
+.journey-loading{position:absolute;z-index:4;inset:0;display:grid;place-items:center;text-align:center;color:#e6f1e5;background:linear-gradient(180deg,#102c28aa,#071b19aa);font-size:13px;pointer-events:none}
+.journey-loading b{display:block;font-size:18px;margin-bottom:8px}
+.journey-loading small{color:#c0d5c6}
+@media(max-width:760px){
+ .journey-world{min-height:100dvh}
+ .journey-top{padding:14px 14px 12px 72px}
+ .journey-top b{font-size:11px!important}
+ .journey-top .muted{font-size:9px!important}
+ .world-hud{left:13px;top:77px;padding:9px 11px;max-width:175px;font-size:9px}
+ .world-hud b{font-size:11px}
+ .world-hint{right:12px;top:77px;font-size:9px;padding:8px 9px;max-width:125px;text-align:center}
+ .journey-below{left:9px;right:9px;bottom:9px;grid-template-columns:1fr;gap:7px}
+ .journey-below>div:first-child{padding:8px;border-radius:13px}
+ .journey-below .eyebrow{font-size:9px!important;margin-bottom:5px!important}
+ .checkpoint-list{gap:5px}
+ .checkpoint-button{flex:1 0 104px;padding:8px;gap:6px}
+ .checkpoint-button .cp-icon{font-size:15px}
+ .checkpoint-button b{font-size:10px}
+ .checkpoint-button small{font-size:9px}
+ .checkpoint-button .cp-state{font-size:8px}
+ .journey-detail{padding:11px 13px;border-radius:13px;max-height:27dvh}
+ .journey-detail h3{font-size:15px;margin:5px 0}
+ .journey-detail p{font-size:10px;line-height:1.4;margin:5px 0}
+ .journey-detail .resultbox{margin:6px 0;padding-left:9px}
+ .journey-detail .btn{padding:9px 12px;font-size:11px}
+ .journey-shell>div:last-child{top:14px;right:12px;width:105px}
+ .journey-shell>div:last-child b,.journey-shell>div:last-child span{font-size:9px!important}
+ .journey-exit{top:13px;left:11px;padding:8px 10px;font-size:10px}
+}
+@media(max-height:650px) and (min-width:761px){
+ .journey-below{bottom:8px}
+ .journey-detail{max-height:31vh;padding:10px}
+ .journey-world{min-height:100vh}
+}</style></head>
 <body><div class="app">
 <header class="top"><div class="brand"><div class="logo">✳</div><div>NAVODAYA<div class="tag">Your life compass</div></div></div><span class="pill">VERSION 03</span></header>
 <div class="layout">
@@ -67,42 +108,24 @@
 <section id="reflection" class="screen"><div class="sectionhead"><div><span class="pill">REFLECTION SPACE</span><h2>Make room for your own voice.</h2><p>Write honestly. Your notes stay in this browser on this device.</p></div></div><div class="card"><h3>Choose a prompt</h3><div id="prompts"></div><textarea id="journal" class="field" placeholder="Write without judging or editing yourself..."></textarea><div class="row" style="margin-top:12px"><button class="btn dark" onclick="saveJournal()">Save reflection</button><span id="savedMsg" class="muted" style="font-size:12px"></span></div></div><div class="sectionhead"><div><h3>Questions worth revisiting</h3></div></div><div class="grid"><div class="card"><h3>Energy</h3><p>When do I feel most alive, engaged or useful?</p></div><div class="card"><h3>Values</h3><p>What would I still care about if nobody applauded?</p></div><div class="card"><h3>Growth</h3><p>What am I avoiding because I might be a beginner?</p></div><div class="card"><h3>Contribution</h3><p>Whose life could become better through my work?</p></div></div></section>
 <section id="directions" class="screen"><div class="sectionhead"><div><span class="pill">EXPLORE, DON'T LABEL</span><h2>Possible directions</h2><p>Use these as doors to investigate, not boxes to fit into.</p></div></div><div class="grid"><div class="card"><div class="icon">🔬</div><h3>Research & discovery</h3><p>Questions, evidence, investigation and solving complex problems.</p><div class="resultbox"><b>Experiment:</b> Read one accessible research paper and explain its central question to a friend.</div></div><div class="card"><div class="icon">🤝</div><h3>People & support</h3><p>Listening, teaching, guiding, caring and helping others progress.</p><div class="resultbox"><b>Experiment:</b> Mentor someone for one week. Notice which parts feel meaningful.</div></div><div class="card"><div class="icon">🛠️</div><h3>Building & creating</h3><p>Making things, designing, improving systems and turning ideas into useful products.</p><div class="resultbox"><b>Experiment:</b> Build a tiny solution to one everyday problem.</div></div><div class="card"><div class="icon">🧩</div><h3>Organising & leading</h3><p>Coordinating people, making plans, taking responsibility and creating momentum.</p><div class="resultbox"><b>Experiment:</b> Organise a small project with a clear goal and deadline.</div></div><div class="card"><div class="icon">🌍</div><h3>Exploration & learning</h3><p>New ideas, cultures, experiences, adaptability and continuous learning.</p><div class="resultbox"><b>Experiment:</b> Try a new skill or visit a place that broadens your perspective.</div></div><div class="card"><div class="icon">🌱</div><h3>Community & impact</h3><p>Social problems, collaboration and improving life beyond your immediate circle.</p><div class="resultbox"><b>Experiment:</b> Volunteer in a local initiative and observe what role suits you.</div></div></div></section>
 <section id="roadmap" class="screen">
-<div class="sectionhead"><div><span class="pill">NAVODAYA V3 · THE JOURNEY OF BECOMING</span><h2>Your growth, brought to life.</h2><p>Explore the trail, visit each milestone and unlock the next part of your journey.</p></div></div>
-<div class="journey-shell">
- <div class="journey-top"><div><b style="font-size:15px">🌿 The Forest of Discovery</b><div class="muted" style="font-size:11px;margin-top:3px">A living map of the person you are becoming</div></div><span class="pill" id="v3-count">0 / 5 MILESTONES</span></div>
- <div class="journey-world">
-  <svg class="forest-scene" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrated green forest with a winding trail, waterfall and five journey milestones">
-   <defs>
-    <linearGradient id="forestSky" x2="0" y2="1"><stop stop-color="#86b6a7"/><stop offset=".55" stop-color="#d8e8c9"/><stop offset="1" stop-color="#557b55"/></linearGradient>
-    <linearGradient id="forestPath" x2="1" y2="0"><stop stop-color="#9b8964"/><stop offset=".5" stop-color="#e0cda2"/><stop offset="1" stop-color="#9d8860"/></linearGradient>
-    <linearGradient id="forestFall" x2="1"><stop stop-color="#8bd1c9"/><stop offset=".45" stop-color="#f4fff8"/><stop offset="1" stop-color="#74bdb8"/></linearGradient>
-    <linearGradient id="forestHill" x2="0" y2="1"><stop stop-color="#4e865e"/><stop offset="1" stop-color="#173f2e"/></linearGradient>
-   </defs>
-   <rect width="900" height="460" fill="url(#forestSky)"/><circle cx="700" cy="90" r="62" fill="#fff6d2" opacity=".24"/>
-   <path d="M0 190 Q160 100 300 190 T600 165 T900 180 V460 H0Z" fill="#8cab83"/><path d="M0 245 Q150 145 330 235 T650 210 T900 225 V460 H0Z" fill="#5d895e"/><path d="M0 290 Q180 205 360 285 T690 265 T900 280 V460 H0Z" fill="url(#forestHill)"/>
-   <path d="M690 115 L805 115 L805 265 Q752 285 700 260Z" fill="#426d51"/><path d="M720 120 L790 120 L790 265 Q755 282 724 260Z" fill="url(#forestFall)"/>
-   <path class="forest-water" d="M730 135 Q744 190 732 260 M751 130 Q765 205 755 265 M772 130 Q781 195 776 255" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" opacity=".8"/><ellipse cx="757" cy="280" rx="105" ry="20" fill="#73c5b9" opacity=".8"/>
-   <path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="#705e43" stroke-width="150" stroke-linecap="round"/><path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="url(#forestPath)" stroke-width="132" stroke-linecap="round"/><path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="#f1dfb8" stroke-width="3" stroke-dasharray="2 18" stroke-linecap="round" opacity=".65"/>
-   <g fill="#173f2c"><ellipse cx="35" cy="90" rx="120" ry="120"/><ellipse cx="150" cy="65" rx="100" ry="90"/><ellipse cx="865" cy="65" rx="135" ry="130"/><ellipse cx="820" cy="185" rx="90" ry="100"/></g>
-   <g fill="#28603d"><ellipse cx="25" cy="210" rx="95" ry="125"/><ellipse cx="130" cy="170" rx="72" ry="95"/><ellipse cx="875" cy="300" rx="100" ry="145"/><ellipse cx="780" cy="370" rx="95" ry="115"/></g>
-   <g fill="#39764a"><ellipse cx="205" cy="250" rx="75" ry="110"/><ellipse cx="675" cy="345" rx="85" ry="110"/><ellipse cx="90" cy="365" rx="105" ry="110"/></g>
-   <g stroke="#173d2c" stroke-width="13" stroke-linecap="round"><path d="M70 0 L65 235 M165 0 L170 185 M850 0 L840 260 M780 10 L785 190"/></g>
-   <g fill="#1d4b34" opacity=".9"><path d="M0 420 Q70 330 145 430 Q210 330 280 460Z"/><path d="M620 460 Q700 330 780 450 Q835 350 900 425V460Z"/></g>
-  </svg>
-  <div id="forest-markers"></div>
-  <div class="world-hud"><b id="world-stage">THE BEGINNING</b><span id="world-sub">Every journey starts with one step.</span></div>
-  <div class="world-hint">Tap a glowing checkpoint to explore</div>
-  <div class="world-caption"><b id="world-caption-title">The Forest of Discovery</b><span id="world-caption-text">Follow the winding path. Your next milestone is waiting.</span></div>
+ <div class="journey-shell">
+  <button class="journey-exit" onclick="go('home')">← EXIT JOURNEY</button>
+  <div class="journey-top"><div><b>THE JOURNEY OF BECOMING</b><div class="muted">A world to explore. A life to shape.</div></div><span class="pill" id="v3-count">0 / 5 MILESTONES</span></div>
+  <div class="journey-world" id="journey-world">
+   <canvas id="journey3d" aria-label="Immersive three dimensional forest journey"></canvas>
+   <div class="journey-loading" id="journey-loading"><div><b>🌲 Entering the forest…</b><small>Preparing your journey</small></div></div>
+   <div class="world-hud"><b id="world-stage">THE BEGINNING</b><span id="world-sub">Every journey starts with one step.</span></div>
+   <div class="world-hint">Tap a glowing beacon to travel</div>
+  </div>
+  <div class="journey-below">
+   <div><div class="eyebrow">YOUR CHECKPOINTS</div><div class="checkpoint-list" id="checkpoint-list"></div></div>
+   <div class="journey-detail" id="checkpoint-detail"><span class="pill">START HERE</span><h3>🌱 Seed of Self</h3><p>Begin by noticing what matters to you.</p><button class="btn dark" onclick="go('discover')">Begin discovery →</button></div>
+  </div>
+  <div><div class="row"><b>JOURNEY PROGRESS</b><span id="v3-percent">0% explored</span></div><div class="journey-progress"><span id="v3-progress"></span></div></div>
  </div>
- <div class="journey-below">
-  <div><div class="eyebrow" style="margin:4px 2px 9px">YOUR CHECKPOINTS</div><div class="checkpoint-list" id="checkpoint-list"></div></div>
-  <div class="journey-detail" id="checkpoint-detail"><span class="pill">START HERE</span><h3>🌱 The Seed of Self</h3><p>Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.</p><b style="font-size:12px">Your first action</b><p>Complete the discovery questions and write down three things you want your life to stand for.</p><button class="btn dark" onclick="go('discover')">Begin discovery →</button></div>
- </div>
- <div style="padding:14px 5px 3px"><div class="row" style="justify-content:space-between"><b style="font-size:12px">Journey progress</b><span id="v3-percent" class="muted" style="font-size:11px">0% explored</span></div><div class="journey-progress"><span id="v3-progress"></span></div><p class="foot" style="margin-bottom:0">Milestones unlock one at a time. Your progress is saved on this device. There is no race and no single correct destination.</p></div>
-</div>
-<div class="sectionhead"><div><span class="pill">YOUR FIRST 7 DAYS</span><h2>Small steps in the real world</h2><p>The forest is a map. Your actual life is where the change happens.</p></div></div>
-<div class="card"><div id="tasks"></div><div class="row" style="margin-top:16px"><button class="btn ghost" onclick="clearTasks()">Reset checklist</button><button class="btn dark" onclick="go('reflection')">Write a reflection →</button></div></div>
-<p class="foot">You do not need to complete every step perfectly. The goal is to learn something real about yourself.</p>
+ <div class="sectionhead"><div><span class="pill">YOUR FIRST 7 DAYS</span><h2>Small steps in the real world</h2><p>The forest is a map. Your actual life is where the change happens.</p></div></div>
+ <div class="card"><div id="tasks"></div><div class="row" style="margin-top:16px"><button class="btn ghost" onclick="clearTasks()">Reset checklist</button><button class="btn dark" onclick="go('reflection')">Write a reflection →</button></div></div>
+ <p class="foot">You do not need to complete every step perfectly. The goal is to learn something real about yourself.</p>
 </section>
 </main></div><p class="foot">NAVODAYA · A life compass, not a life judge. Your answers and reflections are stored locally in this browser. Clearing browser data may erase them. This prototype does not send your entries to a server and does not provide professional psychological or career counselling.</p>
 </div>
@@ -125,7 +148,7 @@ const dims=["Problem-solving","People & support","Creating & building","Organisi
 const desc=["You may enjoy understanding systems, asking precise questions and solving complex problems.","You may find meaning in listening, teaching, caring and helping people move forward.","You may enjoy turning ideas into tangible things and improving how something works.","You may be energised by planning, taking ownership and helping people work towards a shared goal.","You may thrive on curiosity, variety, new experiences and continuous learning."];
 const exp=["Choose one question you are curious about. Spend 45 minutes researching it and explain what you learned.","Offer focused help to someone. Afterwards, reflect on what felt rewarding and what felt draining.","Make a tiny prototype, design or improvement. Let someone use it and ask what could be better.","Organise a small activity with a clear outcome. Notice how you handle responsibility and coordination.","Try one unfamiliar activity, skill or environment. Write down what surprised you."];
 let qi=0,answers=JSON.parse(localStorage.getItem("navAnswers")||"[]"),tasks=JSON.parse(localStorage.getItem("navTasks")||"[]"),journal=localStorage.getItem("navJournal")||"";
-function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));let target=document.getElementById(id);if(target)target.classList.add("active");document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.go===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="discover")renderQ();if(id==="roadmap")renderTasks();if(id==="reflection")loadJournal();}
+function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));let target=document.getElementById(id);if(target)target.classList.add("active");document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.go===id));document.body.classList.toggle("journey-mode",id==="roadmap");window.scrollTo({top:0,behavior:"instant"});if(id==="discover")renderQ();if(id==="roadmap"){renderTasks();if(window.navV3Resize)window.navV3Resize();}if(id==="reflection")loadJournal();}
 document.querySelectorAll(".nav").forEach(n=>n.addEventListener("click",()=>go(n.dataset.go)));
 function saveAnswers(){localStorage.setItem("navAnswers",JSON.stringify(answers));updateHome()}
 function updateHome(){let done=answers.filter(x=>Number.isInteger(x)).length;document.getElementById("homeProgress").textContent=done+"/12";document.getElementById("taskProgress").textContent=tasks.filter(Boolean).length+"/7";document.getElementById("homeBar").style.width=(done/12*100)+"%"}
@@ -148,45 +171,110 @@ buildPrompts();updateHome();renderQ();
 </script>
 <script>
 (()=>{
- const milestones=[
-  {icon:'🌱',name:'Seed of Self',subtitle:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like on an ordinary Tuesday?',unlock:'Complete your discovery questions.'},
-  {icon:'🌳',name:'Forest of Strengths',subtitle:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.',unlock:'Complete the Seed of Self milestone.'},
-  {icon:'💧',name:'River of Exploration',subtitle:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.',unlock:'Complete the Forest of Strengths milestone.'},
-  {icon:'🏔️',name:'Mountain of Purpose',subtitle:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?',unlock:'Complete the River of Exploration milestone.'},
-  {icon:'🌅',name:'Horizon of Action',subtitle:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.',unlock:'Complete the Mountain of Purpose milestone.'}
+ const M=[
+  {icon:'🌱',name:'Seed of Self',sub:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like on an ordinary Tuesday?'},
+  {icon:'🌳',name:'Forest of Strengths',sub:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.'},
+  {icon:'💧',name:'River of Exploration',sub:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.'},
+  {icon:'🏔️',name:'Mountain of Purpose',sub:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?'},
+  {icon:'🌅',name:'Horizon of Action',sub:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.'}
  ];
- const positions=[{x:44,y:88},{x:40,y:68},{x:56,y:49},{x:51,y:31},{x:56,y:15}];
- let completed=[];try{completed=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
- if(!Array.isArray(completed)||completed.length!==5)completed=[false,false,false,false,false];
- completed=completed.map(Boolean);
- let selected=Math.min(completed.lastIndexOf(true)+1,4);
- const $=id=>document.getElementById(id);
- function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(completed))}catch(e){}}
- function showDetail(i){
-  const m=milestones[i],unlocked=i===0||completed[i-1],done=completed[i];
-  $('checkpoint-detail').innerHTML='<span class="pill">'+(done?'MILESTONE COMPLETE':unlocked?'CHECKPOINT '+(i+1)+' OF 5':'LOCKED CHECKPOINT')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:12px">Your action</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(done?'<span class="pill">✓ YOU HAVE EXPLORED THIS MILESTONE</span>':unlocked?'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>':'<p>🔒 '+m.unlock+'</p>');
-  $('world-caption-title').textContent=m.icon+' '+m.name;
-  $('world-caption-text').textContent=m.subtitle;
+ const ts=[.06,.27,.49,.72,.94],$=id=>document.getElementById(id);
+ let done=[];try{done=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
+ if(!Array.isArray(done)||done.length!==5)done=[false,false,false,false,false];done=done.map(Boolean);
+ let selected=Math.min(done.lastIndexOf(true)+1,4),scene=null,renderer=null,camera=null,avatar=null,curve=null,markers=[],raf=0,clock=null,targetT=ts[selected],currentT=ts[selected],limbs=[],raycaster=null,pointer=null;
+ function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(done))}catch(e){}}
+ function unlocked(i){return i===0||done[i-1]}
+ function detail(i){
+  const m=M[i],isDone=done[i];
+  $('checkpoint-detail').innerHTML='<span class="pill">'+(isDone?'MILESTONE COMPLETE':'CHECKPOINT '+(i+1)+' OF 5')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:11px">YOUR NEXT ACTION</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(isDone?'<span class="pill">✓ EXPLORED</span>':'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>');
+  $('world-stage').textContent=m.name.toUpperCase();$('world-sub').textContent=m.sub;
  }
  function render(){
-  const n=completed.filter(Boolean).length;
-  $('v3-count').textContent=n+' / 5 MILESTONES';
-  $('v3-progress').style.width=(n/5*100)+'%';
-  $('v3-percent').textContent=Math.round(n/5*100)+'% explored';
-  $('world-stage').textContent=n===5?'A NEW HORIZON':n===0?'THE BEGINNING':milestones[Math.min(n,4)].name.toUpperCase();
-  $('world-sub').textContent=n===5?'You have reached a new beginning.':n+' milestone'+(n===1?'':'s')+' completed. Keep exploring.';
-  $('forest-markers').innerHTML=milestones.map((m,i)=>{
-   const unlocked=i===0||completed[i-1],done=completed[i],p=positions[i];
-   return '<button type="button" class="forest-marker forest-glow '+(done?'done ':'')+(!unlocked?'locked ':'')+(selected===i?'selected':'')+'" style="left:'+p.x+'%;top:'+p.y+'%" aria-label="'+(unlocked?'Open ':'Locked ')+m.name+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')">'+(done?'✓':i+1)+'</button>';
-  }).join('');
-  $('checkpoint-list').innerHTML=milestones.map((m,i)=>{
-   const unlocked=i===0||completed[i-1],done=completed[i];
-   return '<button type="button" class="checkpoint-button '+(selected===i?'active':'')+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done?'✅':unlocked?m.icon:'🔒')+'</span><span><b>'+m.name+'</b><small>'+m.subtitle+'</small></span><span class="cp-state">'+(done?'DONE':unlocked?'EXPLORE':'LOCKED')+'</span></button>';
-  }).join('');
-  showDetail(selected);
+  const n=done.filter(Boolean).length;
+  $('v3-count').textContent=n+' / 5 MILESTONES';$('v3-progress').style.width=(n*20)+'%';$('v3-percent').textContent=(n*20)+'% explored';
+  $('checkpoint-list').innerHTML=M.map((m,i)=>'<button type="button" class="checkpoint-button '+(i===selected?'active':'')+'" '+(!unlocked(i)?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done[i]?'✓':m.icon)+'</span><span><b>'+m.name+'</b><small>'+m.sub+'</small></span><span class="cp-state">'+(done[i]?'DONE':unlocked(i)?'VISIT':'LOCKED')+'</span></button>').join('');
+  detail(selected);
  }
- window.navV3Select=i=>{if(!Number.isInteger(i)||i<0||i>=5||(i>0&&!completed[i-1]))return;selected=i;render();};
- window.navV3Complete=i=>{if(!Number.isInteger(i)||i<0||i>=5||(i>0&&!completed[i-1]))return;completed[i]=true;save();selected=Math.min(i+1,4);render();};
+ window.navV3Select=i=>{if(!Number.isInteger(i)||i<0||i>4||!unlocked(i))return;selected=i;targetT=ts[i];render();if(scene&&renderer)markers.forEach((m,k)=>{if(m.userData.index===i)m.userData.pulse=1;});};
+ window.navV3Complete=i=>{if(!Number.isInteger(i)||i<0||i>4||!unlocked(i))return;done[i]=true;save();selected=Math.min(i+1,4);targetT=ts[selected];render();};
+ function mat(color,rough=.85,metal=0){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});}
+ function makeTree(x,z,s){
+  const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(s);
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.34,4.2,7),mat(0x493b2b));trunk.position.y=2.1;trunk.castShadow=true;g.add(trunk);
+  const greens=[0x174b35,0x205d3c,0x2e7048,0x3c7950];
+  for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.ConeGeometry(2.1-k*.22,3.4,8),mat(greens[(Math.random()*greens.length)|0]));c.position.y=3.6+k*1.45;c.castShadow=true;g.add(c);}
+  scene.add(g);
+ }
+ function makeAvatar(){
+  const root=new THREE.Group();const cloth=mat(0x243f3a),pants=mat(0x79694f),skin=mat(0xb9825f),boots=mat(0x302b24),pack=mat(0x8b6844),hair=mat(0x201d19);
+  function sphere(parent,r,pos,material,scale){const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),material);o.position.set(...pos);if(scale)o.scale.set(...scale);o.castShadow=true;parent.add(o);return o;}
+  function limb(parent,r1,r2,len,material){const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,len,10),material);o.position.y=-len/2;o.castShadow=true;parent.add(o);sphere(parent,r1,[0,0,0],material);return o;}
+  sphere(root,.29,[0,1.58,0],cloth,[.72,1.25,.52]);
+  sphere(root,.22,[0,2.28,0],skin,[.88,1.12,.86]);sphere(root,.23,[0,2.42,-.035],hair,[.96,.55,.92]);
+  const backpack=new THREE.Mesh(new THREE.BoxGeometry(.48,.62,.28),pack);backpack.position.set(0,1.62,.29);backpack.castShadow=true;root.add(backpack);
+  const legs=[];
+  for(const side of [-1,1]){
+   const hip=new THREE.Group();hip.position.set(side*.14,.94,0);root.add(hip);limb(hip,.105,.13,.67,pants);sphere(hip,.12,[0,-.68,-.04],boots,[1.1,.45,1.5]);legs.push(hip);
+   const arm=new THREE.Group();arm.position.set(side*.28,1.9,0);root.add(arm);limb(arm,.075,.1,.62,cloth);sphere(arm,.08,[0,-.65,0],skin);limbs.push(arm);
+  }
+  avatar=root;root.scale.setScalar(1.08);scene.add(root);
+  root.userData.legs=legs;root.userData.arms=limbs;
+ }
+ function createWorld(){
+  const canvas=$('journey3d');
+  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});}
+  catch(e){$('journey-loading').innerHTML='<div><b>3D view unavailable on this browser</b><small>Try opening Navodaya in the latest Chrome with hardware acceleration enabled.</small></div>';return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.setSize(canvas.clientWidth,canvas.clientHeight,false);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputEncoding=THREE.sRGBEncoding;
+  scene=new THREE.Scene();scene.background=new THREE.Color(0x9bbcaf);scene.fog=new THREE.FogExp2(0x9bbcaf,.014);
+  camera=new THREE.PerspectiveCamera(57,canvas.clientWidth/canvas.clientHeight,.1,240);
+  const hemi=new THREE.HemisphereLight(0xdcebd9,0x263c2d,1.25);scene.add(hemi);
+  const sun=new THREE.DirectionalLight(0xffe4b8,2.1);sun.position.set(-28,42,20);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;scene.add(sun);
+  const ground=new THREE.Mesh(new THREE.PlaneGeometry(220,180),mat(0x345c3b));ground.rotation.x=-Math.PI/2;ground.position.set(0,-.16,-25);ground.receiveShadow=true;scene.add(ground);
+  const pts=[new THREE.Vector3(0,.04,19),new THREE.Vector3(2,.04,12),new THREE.Vector3(-2,.04,4),new THREE.Vector3(-1,.04,-5),new THREE.Vector3(4,.04,-14),new THREE.Vector3(1,.04,-23),new THREE.Vector3(-4,.04,-32),new THREE.Vector3(0,.04,-42),new THREE.Vector3(3,.04,-52),new THREE.Vector3(0,.04,-65)];
+  curve=new THREE.CatmullRomCurve3(pts);
+  const samples=curve.getPoints(220),verts=[],indices=[];
+  for(let i=0;i<samples.length;i++){const p=samples[i],t=curve.getTangent(i/(samples.length-1)),side=new THREE.Vector3(-t.z,0,t.x).normalize();for(const w of [-2.7,2.7])verts.push(p.x+side.x*w,p.y+.035,p.z+side.z*w);if(i<samples.length-1){const a=i*2;indices.push(a,a+1,a+2,a+1,a+3,a+2);}}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.setIndex(indices);geo.computeVertexNormals();const road=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x9a815d,roughness:1,side:THREE.DoubleSide}));road.receiveShadow=true;scene.add(road);
+  const edgeMat=mat(0x4e4a35);[-1,1].forEach(side=>{const points=curve.getPoints(160).map((p,i)=>{const t=curve.getTangent(i/159);return new THREE.Vector3(p.x-t.z*side*2.85,.06,p.z+t.x*side*2.85)});const line=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),160,.12,5,false),edgeMat);scene.add(line);});
+  let seed=41;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+  for(let i=0;i<190;i++){const x=(rnd()-.5)*105,z=18-rnd()*100;const p=curve.getPointAt(Math.min(.99,Math.max(.01,(19-z)/84)));if(Math.abs(x-p.x)<5.4)continue;makeTree(x,z,.65+rnd()*.95);}
+  const rockMat=mat(0x66756a),waterMat=new THREE.MeshStandardMaterial({color:0x8acbc4,roughness:.22,metalness:.08,transparent:true,opacity:.88});
+  const cliff=new THREE.Mesh(new THREE.BoxGeometry(13,10,5),rockMat);cliff.position.set(18,5,-35);cliff.castShadow=true;scene.add(cliff);
+  const fall=new THREE.Mesh(new THREE.PlaneGeometry(6,9),waterMat);fall.position.set(18,5,-32.35);scene.add(fall);
+  const pool=new THREE.Mesh(new THREE.CircleGeometry(5,32),waterMat);pool.rotation.x=-Math.PI/2;pool.position.set(18, .04,-28);scene.add(pool);
+  for(let i=0;i<55;i++){const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.4+rnd()*.8,0),rockMat);rock.position.set((rnd()-.5)*35,.2+rnd()*.6,-rnd()*80);rock.rotation.set(rnd(),rnd(),rnd());rock.scale.y=.6;scene.add(rock);}
+  makeAvatar();
+  markers=[];
+  M.forEach((m,i)=>{
+   const p=curve.getPointAt(ts[i]),g=new THREE.Group();g.position.set(p.x,.1,p.z);
+   const stem=new THREE.Mesh(new THREE.CylinderGeometry(.06,.11,1.45,8),mat(0x746044));stem.position.y=.72;g.add(stem);
+   const ring=new THREE.Mesh(new THREE.TorusGeometry(.72,.065,10,36),new THREE.MeshStandardMaterial({color:0xd7efb5,emissive:0x7ca85b,emissiveIntensity:1.4,roughness:.3}));ring.position.y=1.65;ring.rotation.x=Math.PI/2;g.add(ring);
+   const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.25,1),new THREE.MeshStandardMaterial({color:0xe6f5bd,emissive:0x8cbb68,emissiveIntensity:2}));orb.position.y=1.65;g.add(orb);
+   const light=new THREE.PointLight(0xb8ef9c,1.4,7);light.position.y=2;g.add(light);
+   g.userData.index=i;g.userData.ring=ring;g.userData.orb=orb;g.userData.pulse=0;scene.add(g);markers.push(g);
+  });
+  const fireGeo=new THREE.BufferGeometry(),firePos=new Float32Array(110*3);for(let i=0;i<110;i++){firePos[i*3]=(rnd()-.5)*65;firePos[i*3+1]=1+rnd()*10;firePos[i*3+2]=10-rnd()*90;}fireGeo.setAttribute('position',new THREE.BufferAttribute(firePos,3));const fire=new THREE.Points(fireGeo,new THREE.PointsMaterial({color:0xdff6b5,size:.12,transparent:true,opacity:.75}));scene.add(fire);
+  raycaster=new THREE.Raycaster();pointer=new THREE.Vector2();canvas.addEventListener('pointerdown',onTap,{passive:true});
+  clock=new THREE.Clock();$('journey-loading').style.display='none';resize();animate();
+ }
+ function onTap(e){
+  if(!renderer||!camera)return;const r=$('journey3d').getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);
+  const hits=raycaster.intersectObjects(markers,true);if(!hits.length)return;let obj=hits[0].object;while(obj&&!Number.isInteger(obj.userData.index))obj=obj.parent;if(obj&&unlocked(obj.userData.index))window.navV3Select(obj.userData.index);
+ }
+ function resize(){if(!renderer)return;const c=$('journey3d'),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+ function animate(){
+  raf=requestAnimationFrame(animate);if(!renderer||!avatar)return;const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.05);
+  currentT+=(targetT-currentT)*Math.min(1,dt*1.5);
+  const p=curve.getPointAt(currentT),tan=curve.getTangentAt(currentT);avatar.position.set(p.x,.08,p.z);avatar.rotation.y=Math.atan2(tan.x,tan.z);
+  const moving=Math.abs(targetT-currentT)>.003,walk=Math.sin(t*8)*(moving?.55:.035);avatar.userData.legs.forEach((l,i)=>l.rotation.x=walk*(i===0?1:-1));avatar.userData.arms.forEach((a,i)=>a.rotation.x=-walk*(i===0?1:-1));
+  const behind=new THREE.Vector3(p.x-tan.x*8,4.7,p.z-tan.z*8);camera.position.lerp(behind,.075);const look=new THREE.Vector3(p.x+tan.x*5,1.8,p.z+tan.z*5);camera.lookAt(look);
+  markers.forEach((m,i)=>{m.userData.ring.rotation.z=t*.6;m.userData.orb.position.y=1.65+Math.sin(t*1.8+i)*.13;const on=i===selected;m.scale.setScalar(on?1+Math.sin(t*3)*.045:1);m.children[2].material.emissiveIntensity=on?2.8:.9;});
+  renderer.render(scene,camera);
+ }
+ window.navV3Resize=resize;
+ function loadThree(urls,i=0){if(i>=urls.length){$('journey-loading').innerHTML='<div><b>Could not load the 3D world</b><small>Check your connection, then reopen the journey.</small></div>';return;}const s=document.createElement('script');s.src=urls[i];s.onload=()=>{try{createWorld();}catch(e){console.error(e);$('journey-loading').innerHTML='<div><b>The forest could not start</b><small>Please refresh and try again.</small></div>';}};s.onerror=()=>loadThree(urls,i+1);document.head.appendChild(s);}
  render();
+ loadThree(['https://cdnjs.cloudflare.com/ajax/libs/three.js/0.128.0/three.min.js','https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js']);
+ window.addEventListener('resize',resize);
 })();
 </script></body></html>
