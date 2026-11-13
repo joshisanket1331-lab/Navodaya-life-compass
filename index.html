@@ -181,7 +181,7 @@ buildPrompts();updateHome();renderQ();
  const ts=[.06,.27,.49,.72,.94],$=id=>document.getElementById(id);
  let done=[];try{done=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
  if(!Array.isArray(done)||done.length!==5)done=[false,false,false,false,false];done=done.map(Boolean);
- let selected=Math.min(done.lastIndexOf(true)+1,4),scene=null,renderer=null,camera=null,avatar=null,curve=null,markers=[],raf=0,clock=null,targetT=ts[selected],currentT=ts[selected],limbs=[],raycaster=null,pointer=null;
+ let selected=Math.min(done.lastIndexOf(true)+1,4),scene=null,renderer=null,camera=null,avatar=null,curve=null,markers=[],raf=0,clock=null,mixer=null,walkAction=null,idleAction=null,targetT=ts[selected],currentT=ts[selected],limbs=[],raycaster=null,pointer=null;
  function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(done))}catch(e){}}
  function unlocked(i){return i===0||done[i-1]}
  function detail(i){
@@ -248,7 +248,7 @@ buildPrompts();updateHome();renderQ();
   const fall=new THREE.Mesh(new THREE.PlaneGeometry(6,9),waterMat);fall.position.set(18,5,-32.35);scene.add(fall);
   const pool=new THREE.Mesh(new THREE.CircleGeometry(5,32),waterMat);pool.rotation.x=-Math.PI/2;pool.position.set(18, .04,-28);scene.add(pool);
   for(let i=0;i<55;i++){const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.4+rnd()*.8,0),rockMat);rock.position.set((rnd()-.5)*35,.2+rnd()*.6,-rnd()*80);rock.rotation.set(rnd(),rnd(),rnd());rock.scale.y=.6;scene.add(rock);}
-  makeAvatar();
+  loadHumanExplorer();
   markers=[];
   M.forEach((m,i)=>{
    const p=curve.getPointAt(ts[i]),g=new THREE.Group();g.position.set(p.x,.1,p.z);
@@ -262,22 +262,39 @@ buildPrompts();updateHome();renderQ();
   raycaster=new THREE.Raycaster();pointer=new THREE.Vector2();canvas.addEventListener('pointerdown',onTap,{passive:true});
   clock=new THREE.Clock();$('journey-loading').style.display='none';resize();animate();
  }
+ function loadHumanExplorer(){
+  const loader=new THREE.GLTFLoader();
+  loader.load('https://threejs.org/examples/models/gltf/Soldier.glb',gltf=>{
+   avatar=gltf.scene;avatar.scale.setScalar(1.05);avatar.position.set(0,0,0);
+   avatar.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+   scene.add(avatar);mixer=new THREE.AnimationMixer(avatar);
+   const walk=gltf.animations.find(a=>/walk/i.test(a.name))||gltf.animations.find(a=>/run/i.test(a.name));
+   const idle=gltf.animations.find(a=>/idle/i.test(a.name));
+   if(walk)walkAction=mixer.clipAction(walk);
+   if(idle){idleAction=mixer.clipAction(idle);idleAction.play();}
+   $('journey-loading').style.display='none';
+  },undefined,error=>{console.error('Human explorer model failed to load',error);$('journey-loading').innerHTML='<div><b>Explorer model could not load</b><small>Check your connection and reopen the journey.</small></div>';});
+ }
  function onTap(e){
   if(!renderer||!camera)return;const r=$('journey3d').getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);
   const hits=raycaster.intersectObjects(markers,true);if(!hits.length)return;let obj=hits[0].object;while(obj&&!Number.isInteger(obj.userData.index))obj=obj.parent;if(obj&&unlocked(obj.userData.index))window.navV3Select(obj.userData.index);
  }
  function resize(){if(!renderer)return;const c=$('journey3d'),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
  function animate(){
-  raf=requestAnimationFrame(animate);if(!renderer||!avatar)return;const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
-  currentT+=(targetT-currentT)*Math.min(1,dt*2.2);
-  const p=curve.getPointAt(currentT),tan=curve.getTangentAt(currentT);avatar.position.set(p.x,.08,p.z);avatar.rotation.y=Math.atan2(-tan.x,-tan.z);
-  const moving=Math.abs(targetT-currentT)>.003,walk=Math.sin(t*8)*(moving?.55:.035);avatar.userData.legs.forEach((l,i)=>l.rotation.x=walk*(i===0?1:-1));avatar.userData.arms.forEach((a,i)=>a.rotation.x=-walk*(i===0?1:-1));
-  const behind=new THREE.Vector3(p.x-tan.x*8,4.7,p.z-tan.z*8);camera.position.lerp(behind,.085);const look=new THREE.Vector3(p.x+tan.x*4,1.65,p.z+tan.z*4);camera.lookAt(look);
+  raf=requestAnimationFrame(animate);if(!renderer)return;const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+  const direction=Math.sign(targetT-currentT);if(direction)currentT+=direction*Math.min(Math.abs(targetT-currentT),dt*.055);
+  const p=curve.getPointAt(currentT),tan=curve.getTangentAt(currentT);
+  if(avatar){avatar.position.set(p.x,0,p.z);avatar.rotation.y=Math.atan2(-tan.x,-tan.z);}
+  const moving=Math.abs(targetT-currentT)>.001;if(mixer)mixer.update(dt);
+  if(walkAction&&idleAction){if(moving){idleAction.stop();if(!walkAction.isRunning())walkAction.reset().play();}else{walkAction.stop();if(!idleAction.isRunning())idleAction.reset().play();}}
+  else if(walkAction){if(moving){if(!walkAction.isRunning())walkAction.reset().play();}else walkAction.stop();}
+  camera.position.x+=(p.x-tan.x*7-camera.position.x)*.055;camera.position.y+=(5.8-camera.position.y)*.035;
+  camera.lookAt(p.x+tan.x*5,1.25,p.z-18);
   markers.forEach((m,i)=>{m.userData.ring.rotation.z=t*.6;m.userData.orb.position.y=1.65+Math.sin(t*1.8+i)*.13;const on=i===selected;m.scale.setScalar(on?1+Math.sin(t*3)*.045:1);m.children[2].material.emissiveIntensity=on?2.8:.9;});
   renderer.render(scene,camera);
  }
  window.navV3Resize=resize;
- function loadThree(urls,i=0){if(i>=urls.length){$('journey-loading').innerHTML='<div><b>Could not load the 3D world</b><small>Check your connection, then reopen the journey.</small></div>';return;}const s=document.createElement('script');s.src=urls[i];s.onload=()=>{try{createWorld();}catch(e){console.error(e);$('journey-loading').innerHTML='<div><b>The forest could not start</b><small>Please refresh and try again.</small></div>';}};s.onerror=()=>loadThree(urls,i+1);document.head.appendChild(s);}
+ function loadThree(urls,i=0){if(i>=urls.length){$('journey-loading').innerHTML='<div><b>Could not load the 3D world</b><small>Check your connection, then reopen the journey.</small></div>';return;}const s=document.createElement('script');s.src=urls[i];s.onload=()=>{try{const l=document.createElement('script');l.src='https://threejs.org/examples/js/loaders/GLTFLoader.js';l.onload=()=>{try{createWorld();}catch(e){console.error(e);$('journey-loading').innerHTML='<div><b>The forest could not start</b><small>Please refresh and try again.</small></div>';}};l.onerror=()=>{$('journey-loading').innerHTML='<div><b>3D character loader unavailable</b><small>Refresh and try again with a stable connection.</small></div>';};document.head.appendChild(l);}catch(e){console.error(e);}};s.onerror=()=>loadThree(urls,i+1);document.head.appendChild(s);}
  render();
  loadThree(['https://cdnjs.cloudflare.com/ajax/libs/three.js/0.128.0/three.min.js','https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js']);
  window.addEventListener('resize',resize);
