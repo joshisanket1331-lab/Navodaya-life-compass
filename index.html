@@ -13,7 +13,17 @@
 .journey-shell{background:#eaf0e7;border:1px solid #dbe5d9;border-radius:22px;padding:12px;overflow:hidden}
 .journey-top{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 6px 13px;flex-wrap:wrap}
 .journey-world{height:460px;position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(#a9c8bd,#dce8d5 55%,#7d9b77)}
-#journey3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.forest-scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.forest-marker{position:absolute;z-index:4;transform:translate(-50%,-50%);width:38px;height:38px;border:2px solid #f8f4d7;border-radius:50%;background:#e8f4c5;color:#204a37;font-weight:900;box-shadow:0 0 0 5px #e8f4c544,0 4px 14px #102d2080;display:grid;place-items:center;padding:0}
+.forest-marker.locked{background:#aab6a5;color:#41564a;box-shadow:0 0 0 4px #ffffff30}
+.forest-marker.done{background:#f5d98a}
+.forest-marker.selected{outline:3px solid #fff;outline-offset:4px;transform:translate(-50%,-50%) scale(1.12)}
+.forest-marker:focus-visible{outline:3px solid white;outline-offset:5px}
+.forest-glow{animation:forestPulse 2.8s ease-in-out infinite}
+@keyframes forestPulse{50%{filter:drop-shadow(0 0 12px #fff2a8)}}
+.forest-water{animation:waterFlow 3s linear infinite}
+@keyframes waterFlow{to{stroke-dashoffset:-34}}
+.journey-world{touch-action:pan-y}
 .world-hud{position:absolute;left:13px;top:13px;z-index:2;background:#123b32dd;color:white;padding:10px 13px;border-radius:12px;font-size:11px;backdrop-filter:blur(8px)}
 .world-hud b{display:block;font-size:14px;margin-bottom:3px}
 .world-hint{position:absolute;right:13px;top:13px;z-index:2;background:#ffffffdc;color:#24483c;padding:9px 11px;border-radius:12px;font-size:10px}
@@ -45,9 +55,9 @@
 <header class="top"><div class="brand"><div class="logo">✳</div><div>NAVODAYA<div class="tag">Your life compass</div></div></div><span class="pill">VERSION 03</span></header>
 <div class="layout">
 <aside class="side"><small>YOUR JOURNEY</small>
-<div class="nav active" data-go="home">⌂ &nbsp; Overview</div><div class="nav" data-go="discover">◉ &nbsp; Discover yourself</div><div class="nav" data-go="reflection">✎ &nbsp; Reflection space</div><div class="nav" data-go="directions">⌁ &nbsp; Explore directions</div><div class="nav" data-go="roadmap">↗ &nbsp; Your next steps</div></aside>
+<div class="nav active" data-go="home">⌂ &nbsp; Overview</div><div class="nav" data-go="discover">◉ &nbsp; Discover yourself</div><div class="nav" data-go="reflection">✎ &nbsp; Reflection space</div><div class="nav" data-go="directions">⌁ &nbsp; Explore directions</div><div class="nav" data-go="roadmap">🌿 &nbsp; The journey</div></aside>
 <main class="main">
-<section id="home" class="screen active"><div class="hero"><div class="eyebrow">A little more clarity, one step at a time</div><h1>Your life is not a multiple-choice question.</h1><p>Discover what matters to you, notice your strengths, explore possible paths and test them in the real world. No labels. No destiny predictions. Just reflection that leads to action.</p><button class="btn" onclick="go('discover')">Begin my discovery →</button></div>
+<section id="home" class="screen active"><div class="hero"><div class="eyebrow">A little more clarity, one step at a time</div><h1>Your life is not a multiple-choice question.</h1><p>Discover what matters to you, notice your strengths, explore possible paths and test them in the real world. No labels. No destiny predictions. Just reflection that leads to action.</p><div class="row"><button class="btn" onclick="go('discover')">Begin my discovery →</button><button class="btn ghost" onclick="go('roadmap')">Enter the journey 🌿</button></div></div>
 <div class="sectionhead"><div><h2>Four parts of a meaningful life</h2><p>Explore at your own pace. Your journey can change as you do.</p></div></div>
 <div class="grid"><div class="card"><div class="icon">🧠</div><h3>Know yourself</h3><p>Values, interests, strengths, motivations and patterns.</p><span class="pill">DISCOVER</span></div><div class="card"><div class="icon">🧭</div><h3>Explore direction</h3><p>Career and life possibilities worth investigating.</p><span class="pill">EXPLORE</span></div><div class="card"><div class="icon">🌱</div><h3>Build yourself</h3><p>Skills, habits and small experiments that create evidence.</p><span class="pill">GROW</span></div><div class="card"><div class="icon">❤️</div><h3>Live with meaning</h3><p>Connect your goals with people, contribution and wellbeing.</p><span class="pill">CONTRIBUTE</span></div></div>
 <div class="sectionhead"><div><h2>Your compass, your pace</h2><p>Your progress is saved on this device.</p></div></div><div class="card"><div class="row"><div><div class="stat" id="homeProgress">0/12</div><p>Discovery questions answered</p></div><div style="margin-left:auto"><div class="stat" id="taskProgress">0/7</div><p>Starter actions completed</p></div></div><div class="progress"><span id="homeBar"></span></div><button class="btn dark" onclick="go('discover')">Continue your journey →</button></div>
@@ -61,11 +71,28 @@
 <div class="journey-shell">
  <div class="journey-top"><div><b style="font-size:15px">🌿 The Forest of Discovery</b><div class="muted" style="font-size:11px;margin-top:3px">A living map of the person you are becoming</div></div><span class="pill" id="v3-count">0 / 5 MILESTONES</span></div>
  <div class="journey-world">
-  <canvas id="journey3d" aria-label="Interactive 3D forest journey"></canvas>
+  <svg class="forest-scene" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrated green forest with a winding trail, waterfall and five journey milestones">
+   <defs>
+    <linearGradient id="forestSky" x2="0" y2="1"><stop stop-color="#86b6a7"/><stop offset=".55" stop-color="#d8e8c9"/><stop offset="1" stop-color="#557b55"/></linearGradient>
+    <linearGradient id="forestPath" x2="1" y2="0"><stop stop-color="#9b8964"/><stop offset=".5" stop-color="#e0cda2"/><stop offset="1" stop-color="#9d8860"/></linearGradient>
+    <linearGradient id="forestFall" x2="1"><stop stop-color="#8bd1c9"/><stop offset=".45" stop-color="#f4fff8"/><stop offset="1" stop-color="#74bdb8"/></linearGradient>
+    <linearGradient id="forestHill" x2="0" y2="1"><stop stop-color="#4e865e"/><stop offset="1" stop-color="#173f2e"/></linearGradient>
+   </defs>
+   <rect width="900" height="460" fill="url(#forestSky)"/><circle cx="700" cy="90" r="62" fill="#fff6d2" opacity=".24"/>
+   <path d="M0 190 Q160 100 300 190 T600 165 T900 180 V460 H0Z" fill="#8cab83"/><path d="M0 245 Q150 145 330 235 T650 210 T900 225 V460 H0Z" fill="#5d895e"/><path d="M0 290 Q180 205 360 285 T690 265 T900 280 V460 H0Z" fill="url(#forestHill)"/>
+   <path d="M690 115 L805 115 L805 265 Q752 285 700 260Z" fill="#426d51"/><path d="M720 120 L790 120 L790 265 Q755 282 724 260Z" fill="url(#forestFall)"/>
+   <path class="forest-water" d="M730 135 Q744 190 732 260 M751 130 Q765 205 755 265 M772 130 Q781 195 776 255" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" opacity=".8"/><ellipse cx="757" cy="280" rx="105" ry="20" fill="#73c5b9" opacity=".8"/>
+   <path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="#705e43" stroke-width="150" stroke-linecap="round"/><path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="url(#forestPath)" stroke-width="132" stroke-linecap="round"/><path d="M390 470 C320 390 570 355 480 280 C405 220 560 190 505 120" fill="none" stroke="#f1dfb8" stroke-width="3" stroke-dasharray="2 18" stroke-linecap="round" opacity=".65"/>
+   <g fill="#173f2c"><ellipse cx="35" cy="90" rx="120" ry="120"/><ellipse cx="150" cy="65" rx="100" ry="90"/><ellipse cx="865" cy="65" rx="135" ry="130"/><ellipse cx="820" cy="185" rx="90" ry="100"/></g>
+   <g fill="#28603d"><ellipse cx="25" cy="210" rx="95" ry="125"/><ellipse cx="130" cy="170" rx="72" ry="95"/><ellipse cx="875" cy="300" rx="100" ry="145"/><ellipse cx="780" cy="370" rx="95" ry="115"/></g>
+   <g fill="#39764a"><ellipse cx="205" cy="250" rx="75" ry="110"/><ellipse cx="675" cy="345" rx="85" ry="110"/><ellipse cx="90" cy="365" rx="105" ry="110"/></g>
+   <g stroke="#173d2c" stroke-width="13" stroke-linecap="round"><path d="M70 0 L65 235 M165 0 L170 185 M850 0 L840 260 M780 10 L785 190"/></g>
+   <g fill="#1d4b34" opacity=".9"><path d="M0 420 Q70 330 145 430 Q210 330 280 460Z"/><path d="M620 460 Q700 330 780 450 Q835 350 900 425V460Z"/></g>
+  </svg>
+  <div id="forest-markers"></div>
   <div class="world-hud"><b id="world-stage">THE BEGINNING</b><span id="world-sub">Every journey starts with one step.</span></div>
-  <div class="world-hint">Drag to look around · Tap a glowing marker</div>
+  <div class="world-hint">Tap a glowing checkpoint to explore</div>
   <div class="world-caption"><b id="world-caption-title">The Forest of Discovery</b><span id="world-caption-text">Follow the winding path. Your next milestone is waiting.</span></div>
-  <div class="world-fallback hide" id="world-fallback"><div class="fallback-inner"><b>🌲 Your journey is ready</b><p>3D view could not load right now. You can still explore and complete every milestone using the checkpoint list below.</p></div></div>
  </div>
  <div class="journey-below">
   <div><div class="eyebrow" style="margin:4px 2px 9px">YOUR CHECKPOINTS</div><div class="checkpoint-list" id="checkpoint-list"></div></div>
@@ -121,52 +148,45 @@ buildPrompts();updateHome();renderQ();
 </script>
 <script>
 (()=>{
-const canvas=document.getElementById('journey3d'),ctx=canvas.getContext('2d');
-const fallback=document.getElementById('world-fallback');
-const milestones=[
-{icon:'🌱',name:'Seed of Self',subtitle:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like on an ordinary Tuesday?',unlock:'Complete your discovery questions.'},
-{icon:'🌳',name:'Forest of Strengths',subtitle:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.',unlock:'Complete the Seed of Self milestone.'},
-{icon:'💧',name:'River of Exploration',subtitle:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.',unlock:'Complete the Forest of Strengths milestone.'},
-{icon:'🏔️',name:'Mountain of Purpose',subtitle:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?',unlock:'Complete the River of Exploration milestone.'},
-{icon:'🌅',name:'Horizon of Action',subtitle:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.',unlock:'Complete the Mountain of Purpose milestone.'}
-];
-let completed=[];try{completed=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
-if(!Array.isArray(completed)||completed.length!==5)completed=[false,false,false,false,false];
-let selected=Math.min(completed.lastIndexOf(true)+1,4),W=900,H=460,dpr=1,raf=0;
-const points=[{x:.50,y:.91},{x:.43,y:.72},{x:.58,y:.54},{x:.46,y:.35},{x:.55,y:.17}];
-function resize(){const r=canvas.getBoundingClientRect();if(!r.width)return;dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw(performance.now());}
-function path(){ctx.beginPath();ctx.moveTo(W*.50,H*1.08);ctx.bezierCurveTo(W*.40,H*.82,W*.67,H*.72,W*.49,H*.54);ctx.bezierCurveTo(W*.31,H*.38,W*.63,H*.29,W*.53,H*.12);}
-function tree(x,y,scale,shade){ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.fillStyle='#543f2c';ctx.fillRect(-5,-45,10,52);ctx.fillStyle=shade;for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(0,-48-i*12,24-i*2,28-i*3,0,0,Math.PI*2);ctx.fill();}ctx.restore();}
-function draw(t=0){
- if(!ctx)return;ctx.clearRect(0,0,W,H);
- let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#8fb9aa');sky.addColorStop(.48,'#d5e5c9');sky.addColorStop(1,'#5e8158');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- // distant misty hills
- ctx.fillStyle='#789b7b';ctx.beginPath();ctx.moveTo(0,H*.43);for(let x=0;x<=W;x+=35)ctx.lineTo(x,H*(.30+Math.sin(x*.012)*.055));ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
- ctx.fillStyle='#477452';ctx.beginPath();ctx.moveTo(0,H*.56);ctx.quadraticCurveTo(W*.25,H*.35,W*.48,H*.54);ctx.quadraticCurveTo(W*.76,H*.31,W,H*.52);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
- // waterfall and pool
- ctx.fillStyle='#536f55';ctx.fillRect(W*.76,H*.20,W*.12,H*.25);let wg=ctx.createLinearGradient(W*.78,0,W*.87,0);wg.addColorStop(0,'#b5e8df');wg.addColorStop(.5,'#effff9');wg.addColorStop(1,'#83cfc7');ctx.fillStyle=wg;ctx.fillRect(W*.79,H*.22,W*.065,H*.29);
- ctx.strokeStyle='#ffffff99';ctx.lineWidth=2;for(let i=0;i<5;i++){let x=W*(.795+i*.012);ctx.beginPath();ctx.moveTo(x,H*.25);ctx.lineTo(x+Math.sin(t*.003+i)*3,H*.48);ctx.stroke();}
- ctx.fillStyle='#5bafa5';ctx.beginPath();ctx.ellipse(W*.83,H*.53,W*.105,H*.035,0,0,Math.PI*2);ctx.fill();
- // forest framing
- for(let i=0;i<17;i++){let y=H*(.08+(i%7)*.12),sc=.48+(i%5)*.14;tree((i%2?W*.96:W*.04)+(i%3-1)*W*.035,y,sc,i%3?'#24533a':'#315f43');}
- for(let i=0;i<24;i++){let side=i%2?1:-1,x=side*(W*.10+(i%5)*W*.035),y=H*(.28+(i%8)*.095);tree(x,y,.42+(i%4)*.12,i%3?'#356b45':'#1f4b36');}
- // winding earthy path with perspective
- path();ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#6e6548';ctx.lineWidth= W*.22;ctx.stroke();path();ctx.strokeStyle='#c9b58b';ctx.lineWidth=W*.195;ctx.stroke();path();ctx.strokeStyle='#e0cfaa';ctx.lineWidth=W*.16;ctx.stroke();
- // path highlights and stones
- for(let i=0;i<42;i++){let y=H*(.56+i*.011),x=W*(.49+Math.sin(i*.22)*(.02+i*.001));ctx.fillStyle=i%2?'#9d8a67':'#e6d7b8';ctx.beginPath();ctx.ellipse(x,y,2+i*.07,1+i*.025,-.2,0,Math.PI*2);ctx.fill();}
- // glowing milestone markers
- points.forEach((p,i)=>{let x=p.x*W,y=p.y*H,unlocked=i===0||completed[i-1],done=completed[i];ctx.save();ctx.shadowColor=done?'#f8e7a0':'#d9f5b5';ctx.shadowBlur=unlocked?18:3;ctx.fillStyle=done?'#f4d77c':unlocked?'#e5f5b7':'#9ca99a';ctx.beginPath();ctx.arc(x,y,Math.max(9,W*.014),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#244b39';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#244b39';ctx.font='bold '+Math.max(10,W*.014)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(done?'✓':String(i+1),x,y);if(selected===i){ctx.strokeStyle='#fff7cf';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,Math.max(16,W*.023),0,Math.PI*2);ctx.stroke();}ctx.restore();});
- // foreground leaves
- for(let i=0;i<18;i++){let side=i%2?1:-1,x=side*(W*.42+(i%4)*W*.025),y=H*(.82+(i%4)*.055);ctx.fillStyle=i%2?'#173e2c':'#24563a';ctx.beginPath();ctx.ellipse(x,y,18+i%4*4,7+i%3*3,side*.6,0,Math.PI*2);ctx.fill();}
- if(!document.hidden)raf=requestAnimationFrame(draw);
-}
-function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(completed))}catch(e){}}
-function showDetail(i){const m=milestones[i],unlocked=i===0||completed[i-1],done=completed[i];document.getElementById('checkpoint-detail').innerHTML='<span class="pill">'+(done?'MILESTONE COMPLETE':unlocked?'CHECKPOINT '+(i+1)+' OF 5':'LOCKED CHECKPOINT')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:12px">Your action</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(done?'<span class="pill">✓ YOU HAVE EXPLORED THIS MILESTONE</span>':unlocked?'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>':'<p>🔒 '+m.unlock+'</p>');document.getElementById('world-caption-title').textContent=m.icon+' '+m.name;document.getElementById('world-caption-text').textContent=m.subtitle;}
-function render(){const n=completed.filter(Boolean).length;document.getElementById('v3-count').textContent=n+' / 5 MILESTONES';document.getElementById('v3-progress').style.width=(n/5*100)+'%';document.getElementById('v3-percent').textContent=Math.round(n/5*100)+'% explored';document.getElementById('world-stage').textContent=n===5?'A NEW HORIZON':n===0?'THE BEGINNING':milestones[Math.min(n,4)].name.toUpperCase();document.getElementById('world-sub').textContent=n===5?'You have reached a new beginning.':n+' milestone'+(n===1?'':'s')+' completed. Keep exploring.';document.getElementById('checkpoint-list').innerHTML=milestones.map((m,i)=>{let unlocked=i===0||completed[i-1],done=completed[i];return '<button class="checkpoint-button '+(selected===i?'active':'')+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done?'✅':unlocked?m.icon:'🔒')+'</span><span><b>'+m.name+'</b><small>'+m.subtitle+'</small></span><span class="cp-state">'+(done?'DONE':unlocked?'EXPLORE':'LOCKED')+'</span></button>'}).join('');showDetail(selected);draw(performance.now());}
-window.navV3Select=i=>{if(i>0&&!completed[i-1])return;selected=i;render();};
-window.navV3Complete=i=>{if(i>0&&!completed[i-1])return;completed[i]=true;save();selected=Math.min(i+1,4);render();};
-canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;let nearest=-1,d=.045;points.forEach((p,i)=>{let q=Math.hypot(x-p.x,y-p.y);if(q<d){d=q;nearest=i;}});if(nearest>=0)window.navV3Select(nearest);});
-window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!raf)raf=requestAnimationFrame(draw);else if(document.hidden){cancelAnimationFrame(raf);raf=0;}});
-resize();render();
+ const milestones=[
+  {icon:'🌱',name:'Seed of Self',subtitle:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like on an ordinary Tuesday?',unlock:'Complete your discovery questions.'},
+  {icon:'🌳',name:'Forest of Strengths',subtitle:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.',unlock:'Complete the Seed of Self milestone.'},
+  {icon:'💧',name:'River of Exploration',subtitle:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.',unlock:'Complete the Forest of Strengths milestone.'},
+  {icon:'🏔️',name:'Mountain of Purpose',subtitle:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?',unlock:'Complete the River of Exploration milestone.'},
+  {icon:'🌅',name:'Horizon of Action',subtitle:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.',unlock:'Complete the Mountain of Purpose milestone.'}
+ ];
+ const positions=[{x:44,y:88},{x:40,y:68},{x:56,y:49},{x:51,y:31},{x:56,y:15}];
+ let completed=[];try{completed=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
+ if(!Array.isArray(completed)||completed.length!==5)completed=[false,false,false,false,false];
+ completed=completed.map(Boolean);
+ let selected=Math.min(completed.lastIndexOf(true)+1,4);
+ const $=id=>document.getElementById(id);
+ function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(completed))}catch(e){}}
+ function showDetail(i){
+  const m=milestones[i],unlocked=i===0||completed[i-1],done=completed[i];
+  $('checkpoint-detail').innerHTML='<span class="pill">'+(done?'MILESTONE COMPLETE':unlocked?'CHECKPOINT '+(i+1)+' OF 5':'LOCKED CHECKPOINT')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:12px">Your action</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(done?'<span class="pill">✓ YOU HAVE EXPLORED THIS MILESTONE</span>':unlocked?'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>':'<p>🔒 '+m.unlock+'</p>');
+  $('world-caption-title').textContent=m.icon+' '+m.name;
+  $('world-caption-text').textContent=m.subtitle;
+ }
+ function render(){
+  const n=completed.filter(Boolean).length;
+  $('v3-count').textContent=n+' / 5 MILESTONES';
+  $('v3-progress').style.width=(n/5*100)+'%';
+  $('v3-percent').textContent=Math.round(n/5*100)+'% explored';
+  $('world-stage').textContent=n===5?'A NEW HORIZON':n===0?'THE BEGINNING':milestones[Math.min(n,4)].name.toUpperCase();
+  $('world-sub').textContent=n===5?'You have reached a new beginning.':n+' milestone'+(n===1?'':'s')+' completed. Keep exploring.';
+  $('forest-markers').innerHTML=milestones.map((m,i)=>{
+   const unlocked=i===0||completed[i-1],done=completed[i],p=positions[i];
+   return '<button type="button" class="forest-marker forest-glow '+(done?'done ':'')+(!unlocked?'locked ':'')+(selected===i?'selected':'')+'" style="left:'+p.x+'%;top:'+p.y+'%" aria-label="'+(unlocked?'Open ':'Locked ')+m.name+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')">'+(done?'✓':i+1)+'</button>';
+  }).join('');
+  $('checkpoint-list').innerHTML=milestones.map((m,i)=>{
+   const unlocked=i===0||completed[i-1],done=completed[i];
+   return '<button type="button" class="checkpoint-button '+(selected===i?'active':'')+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done?'✅':unlocked?m.icon:'🔒')+'</span><span><b>'+m.name+'</b><small>'+m.subtitle+'</small></span><span class="cp-state">'+(done?'DONE':unlocked?'EXPLORE':'LOCKED')+'</span></button>';
+  }).join('');
+  showDetail(selected);
+ }
+ window.navV3Select=i=>{if(!Number.isInteger(i)||i<0||i>=5||(i>0&&!completed[i-1]))return;selected=i;render();};
+ window.navV3Complete=i=>{if(!Number.isInteger(i)||i<0||i>=5||(i>0&&!completed[i-1]))return;completed[i]=true;save();selected=Math.min(i+1,4);render();};
+ render();
 })();
 </script></body></html>
