@@ -119,74 +119,54 @@ function toggleTask(i,v){tasks[i]=v;localStorage.setItem("navTasks",JSON.stringi
 function clearTasks(){tasks=[];localStorage.setItem("navTasks","[]");renderTasks();updateHome()}
 buildPrompts();updateHome();renderQ();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
 <script>
-const THREE=window.THREE;
 (()=>{
- const canvas=document.getElementById('journey3d'), fallback=document.getElementById('world-fallback');
- const milestones=[
-  {icon:'🌱',name:'Seed of Self',subtitle:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like in an ordinary Tuesday?',unlock:'Complete your discovery questions.'},
-  {icon:'🌳',name:'Forest of Strengths',subtitle:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.',unlock:'Complete the Seed of Self milestone.'},
-  {icon:'💧',name:'River of Exploration',subtitle:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.',unlock:'Complete the Forest of Strengths milestone.'},
-  {icon:'🏔️',name:'Mountain of Purpose',subtitle:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?',unlock:'Complete the River of Exploration milestone.'},
-  {icon:'🌅',name:'Horizon of Action',subtitle:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.',unlock:'Complete the Mountain of Purpose milestone.'}
- ];
- let completed=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]');
- if(!Array.isArray(completed)||completed.length!==5)completed=[false,false,false,false,false];
- let selected=completed.lastIndexOf(true)+1; if(selected>4)selected=4;
- let scene,camera,renderer,raycaster,mouse,player,pathCurve,markerGroups=[],drag=false,prev={x:0,y:0},rotation=0;
- try{
-  if(!THREE)throw new Error('Three.js library did not load');
-  const mat=(color,roughness=.9)=>new THREE.MeshStandardMaterial({color,roughness});
-  const green=mat(0x315f43),darkGreen=mat(0x214b39),leaf=mat(0x54845a),wood=mat(0x76563a),stone=mat(0x87958a),gold=mat(0xf1d58a),water=new THREE.MeshStandardMaterial({color:0x78c8d0,transparent:true,opacity:.72,roughness:.2});
-  scene=new THREE.Scene();scene.background=new THREE.Color(0xb7d1c4);scene.fog=new THREE.Fog(0xb7d1c4,24,72);
-  camera=new THREE.PerspectiveCamera(48,1,.1,150);camera.position.set(0,8,18);camera.lookAt(0,0,-10);
-  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  scene.add(new THREE.HemisphereLight(0xe9f6ed,0x536c4b,2));
-  const sun=new THREE.DirectionalLight(0xfff0cf,2.4);sun.position.set(-8,18,8);sun.castShadow=true;scene.add(sun);
-  const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),mat(0x78966c));ground.rotation.x=-Math.PI/2;ground.position.y=-.18;ground.receiveShadow=true;scene.add(ground);
-  // rolling green banks
-  for(let i=0;i<22;i++){let side=i%2?1:-1,z=2-i*2.5,x=side*(8+Math.sin(i*1.7)*2);let hill=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),mat(i%3?0x668b62:0x789b70));hill.position.set(x,-.35,z);hill.scale.set(5,1.6,4);scene.add(hill);}
-  // winding walking trail
-  const pts=[new THREE.Vector3(0,.02,8),new THREE.Vector3(-1,.02,3),new THREE.Vector3(2,.02,-2),new THREE.Vector3(1,.02,-7),new THREE.Vector3(-2,.02,-12),new THREE.Vector3(0,.02,-17),new THREE.Vector3(2,.02,-22),new THREE.Vector3(0,.02,-29)];
-  pathCurve=new THREE.CatmullRomCurve3(pts);const tube=new THREE.Mesh(new THREE.TubeGeometry(pathCurve,120,.72,10,false),mat(0xc9b58c));tube.position.y=.02;scene.add(tube);
-  // stones along trail
-  for(let i=0;i<90;i++){const t=i/90,p=pathCurve.getPoint(t),side=i%2?1:-1;let s=new THREE.Mesh(new THREE.DodecahedronGeometry(.13+Math.random()*.1,0),stone);s.position.set(p.x+side*(.75+Math.random()*.25),.02,p.z);scene.add(s);}
-  // forest trees
-  for(let i=0;i<105;i++){let z=9-Math.random()*43,side=Math.random()<.5?-1:1;let x=side*(4+Math.random()*13);const h=2.3+Math.random()*3.5;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.22,h*.42,7),wood);trunk.position.set(x,h*.21,z);trunk.castShadow=true;scene.add(trunk);for(let j=0;j<3;j++){let crown=new THREE.Mesh(new THREE.ConeGeometry(1.1-j*.12,1.8,8),i%3===0?darkGreen:green);crown.position.set(x,h*.42+j*.72,z);crown.castShadow=true;scene.add(crown);}}
-  // waterfall and pool on the right
-  const cliff=new THREE.Mesh(new THREE.BoxGeometry(2.5,5,1.2),mat(0x71836f));cliff.position.set(8,2,-10);scene.add(cliff);
-  const fall=new THREE.Mesh(new THREE.PlaneGeometry(1.5,4.5),water);fall.position.set(7.4,2.5,-9.35);scene.add(fall);
-  const pool=new THREE.Mesh(new THREE.CircleGeometry(1.8,32),water);pool.rotation.x=-Math.PI/2;pool.position.set(7.5,.03,-7.5);scene.add(pool);
-  // checkpoint pedestals, glowing rings and signposts
-  const markerT=[.05,.27,.49,.72,.94];
-  milestones.forEach((m,i)=>{const g=new THREE.Group(),p=pathCurve.getPoint(markerT[i]);g.position.set(p.x,.12,p.z);const pedestal=new THREE.Mesh(new THREE.CylinderGeometry(.65,.8,.28,12),mat(0x8c9c80));pedestal.position.y=.13;g.add(pedestal);const ring=new THREE.Mesh(new THREE.TorusGeometry(.85,.09,8,32),new THREE.MeshStandardMaterial({color:0xffdf85,emissive:0xc28b30,emissiveIntensity:.65}));ring.rotation.x=Math.PI/2;ring.position.y=.55;g.add(ring);const orb=new THREE.Mesh(new THREE.SphereGeometry(.32,18,14),new THREE.MeshStandardMaterial({color:0xffe9a8,emissive:0xd6a63b,emissiveIntensity:.8}));orb.position.y=1.2;g.add(orb);const post=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,1.15,7),wood);post.position.set(.95,.65,0);g.add(post);const board=new THREE.Mesh(new THREE.BoxGeometry(1.25,.48,.12),wood);board.position.set(1.45,.95,0);g.add(board);g.userData.index=i;scene.add(g);markerGroups.push(g);});
-  // tiny traveller
-  player=new THREE.Group();const body=new THREE.Mesh(new THREE.CapsuleGeometry(.23,.55,4,8),mat(0x254d43));body.position.y=.48;player.add(body);const head=new THREE.Mesh(new THREE.SphereGeometry(.19,14,12),mat(0xe4b58e));head.position.y=.96;player.add(head);player.position.copy(pathCurve.getPoint(0));player.position.y=.03;scene.add(player);
-  raycaster=new THREE.Raycaster();mouse=new THREE.Vector2();
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  new ResizeObserver(resize).observe(canvas);resize();
-  canvas.addEventListener('pointerdown',e=>{drag=true;prev={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId)});
-  canvas.addEventListener('pointermove',e=>{if(drag){rotation+=(e.clientX-prev.x)*.003;camera.position.x=Math.sin(rotation)*5;camera.lookAt(0,0,-10);prev={x:e.clientX,y:e.clientY}}});
-  canvas.addEventListener('pointerup',()=>drag=false);
-  canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(markerGroups,true);if(hits.length){let o=hits[0].object;while(o&&!Number.isInteger(o.userData.index))o=o.parent;if(o)window.navV3Select(o.userData.index);}});
-  function animate(t){requestAnimationFrame(animate);markerGroups.forEach((g,i)=>{g.children[2].position.y=1.2+Math.sin(t*.0018+i)*.12;g.children[1].material.emissiveIntensity=completed[i]?.15:.55+Math.sin(t*.002+i)*.2;});renderer.render(scene,camera);}
-  animate(0);
- }catch(e){
-  fallback.classList.remove('hide');
-  fallback.innerHTML='<div class="fallback-inner"><b>🌿 The Forest of Discovery</b><p>Your journey is ready. The 3D engine could not start on this browser, but all checkpoints and activities below are available. Try opening the app in Chrome with hardware acceleration enabled.</p></div>';
- }
- function save(){localStorage.setItem('navV3Milestones',JSON.stringify(completed));}
- function render(){
-  const n=completed.filter(Boolean).length;document.getElementById('v3-count').textContent=n+' / 5 MILESTONES';document.getElementById('v3-progress').style.width=(n/5*100)+'%';document.getElementById('v3-percent').textContent=Math.round(n/5*100)+'% explored';
-  document.getElementById('world-stage').textContent=n===5?'A NEW HORIZON':n===0?'THE BEGINNING':milestones[Math.min(n,4)].name.toUpperCase();
-  document.getElementById('world-sub').textContent=n===5?'You have reached a new beginning.':n+' milestone'+(n===1?'':'s')+' completed. Keep exploring.';
-  document.getElementById('checkpoint-list').innerHTML=milestones.map((m,i)=>{let unlocked=i===0||completed[i-1],done=completed[i];return '<button class="checkpoint-button '+(selected===i?'active':'')+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done?'✅':unlocked?m.icon:'🔒')+'</span><span><b>'+m.name+'</b><small>'+m.subtitle+'</small></span><span class="cp-state">'+(done?'DONE':unlocked?'EXPLORE':'LOCKED')+'</span></button>'}).join('');
-  if(selected>=0)showDetail(selected);
- }
- function showDetail(i){const m=milestones[i],unlocked=i===0||completed[i-1],done=completed[i];document.getElementById('checkpoint-detail').innerHTML='<span class="pill">'+(done?'MILESTONE COMPLETE':unlocked?'CHECKPOINT '+(i+1)+' OF 5':'LOCKED CHECKPOINT')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:12px">Your action</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(done?'<span class="pill">✓ YOU HAVE EXPLORED THIS MILESTONE</span>':unlocked?'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>':'<p>🔒 '+m.unlock+'</p>');document.getElementById('world-caption-title').textContent=m.icon+' '+m.name;document.getElementById('world-caption-text').textContent=m.subtitle;}
- window.navV3Select=i=>{if(i>0&&!completed[i-1])return;selected=i;render();};
- window.navV3Complete=i=>{if(i>0&&!completed[i-1])return;completed[i]=true;save();selected=Math.min(i+1,4);render();if(player&&pathCurve){const p=pathCurve.getPoint([.05,.27,.49,.72,.94][i]);player.position.set(p.x,.03,p.z);}};
- render();
+const canvas=document.getElementById('journey3d'),ctx=canvas.getContext('2d');
+const fallback=document.getElementById('world-fallback');
+const milestones=[
+{icon:'🌱',name:'Seed of Self',subtitle:'Know what matters',desc:'Begin by noticing what matters to you. Your first step is not to choose a destination, but to understand the traveller.',action:'Complete the 12 discovery questions. Then write down three values you want your life to stand for.',activity:'Write three values that you want your decisions to reflect. What would each value look like on an ordinary Tuesday?',unlock:'Complete your discovery questions.'},
+{icon:'🌳',name:'Forest of Strengths',subtitle:'Notice your strengths',desc:'Strengths are not only talents. They are also ways of thinking, caring, creating and showing up when things get difficult.',action:'Ask one trusted person: “When have you seen me at my best?” Compare their answer with your own.',activity:'List two things people rely on you for. Add one example from real life that proves each strength.',unlock:'Complete the Seed of Self milestone.'},
+{icon:'💧',name:'River of Exploration',subtitle:'Follow your curiosity',desc:'Interests become clearer through experience. Follow a question, try a skill and notice what gives you energy.',action:'Choose one possible direction and run a tiny 30-minute experiment this week.',activity:'What is one subject or problem you keep returning to? Find one small way to explore it in the next seven days.',unlock:'Complete the Forest of Strengths milestone.'},
+{icon:'🏔️',name:'Mountain of Purpose',subtitle:'Connect meaning with action',desc:'Purpose is not a hidden job title waiting to be discovered. It can grow where your values, abilities and contribution meet.',action:'Identify one problem you genuinely care about and one small way you could help.',activity:'Who could benefit from your skills? What is one useful contribution you could make without waiting for perfect conditions?',unlock:'Complete the River of Exploration milestone.'},
+{icon:'🌅',name:'Horizon of Action',subtitle:'Build your next chapter',desc:'Clarity grows when you act, reflect and adjust. Your next chapter should be practical enough to begin and flexible enough to evolve.',action:'Choose one 30-day experiment. Define the smallest first step and when you will do it.',activity:'Write one goal for the next 30 days, the first action, and how you will know whether the experiment taught you something.',unlock:'Complete the Mountain of Purpose milestone.'}
+];
+let completed=[];try{completed=JSON.parse(localStorage.getItem('navV3Milestones')||'[false,false,false,false,false]')}catch(e){}
+if(!Array.isArray(completed)||completed.length!==5)completed=[false,false,false,false,false];
+let selected=Math.min(completed.lastIndexOf(true)+1,4),W=900,H=460,dpr=1,raf=0;
+const points=[{x:.50,y:.91},{x:.43,y:.72},{x:.58,y:.54},{x:.46,y:.35},{x:.55,y:.17}];
+function resize(){const r=canvas.getBoundingClientRect();if(!r.width)return;dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw(performance.now());}
+function path(){ctx.beginPath();ctx.moveTo(W*.50,H*1.08);ctx.bezierCurveTo(W*.40,H*.82,W*.67,H*.72,W*.49,H*.54);ctx.bezierCurveTo(W*.31,H*.38,W*.63,H*.29,W*.53,H*.12);}
+function tree(x,y,scale,shade){ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.fillStyle='#543f2c';ctx.fillRect(-5,-45,10,52);ctx.fillStyle=shade;for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(0,-48-i*12,24-i*2,28-i*3,0,0,Math.PI*2);ctx.fill();}ctx.restore();}
+function draw(t=0){
+ if(!ctx)return;ctx.clearRect(0,0,W,H);
+ let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#8fb9aa');sky.addColorStop(.48,'#d5e5c9');sky.addColorStop(1,'#5e8158');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // distant misty hills
+ ctx.fillStyle='#789b7b';ctx.beginPath();ctx.moveTo(0,H*.43);for(let x=0;x<=W;x+=35)ctx.lineTo(x,H*(.30+Math.sin(x*.012)*.055));ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+ ctx.fillStyle='#477452';ctx.beginPath();ctx.moveTo(0,H*.56);ctx.quadraticCurveTo(W*.25,H*.35,W*.48,H*.54);ctx.quadraticCurveTo(W*.76,H*.31,W,H*.52);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+ // waterfall and pool
+ ctx.fillStyle='#536f55';ctx.fillRect(W*.76,H*.20,W*.12,H*.25);let wg=ctx.createLinearGradient(W*.78,0,W*.87,0);wg.addColorStop(0,'#b5e8df');wg.addColorStop(.5,'#effff9');wg.addColorStop(1,'#83cfc7');ctx.fillStyle=wg;ctx.fillRect(W*.79,H*.22,W*.065,H*.29);
+ ctx.strokeStyle='#ffffff99';ctx.lineWidth=2;for(let i=0;i<5;i++){let x=W*(.795+i*.012);ctx.beginPath();ctx.moveTo(x,H*.25);ctx.lineTo(x+Math.sin(t*.003+i)*3,H*.48);ctx.stroke();}
+ ctx.fillStyle='#5bafa5';ctx.beginPath();ctx.ellipse(W*.83,H*.53,W*.105,H*.035,0,0,Math.PI*2);ctx.fill();
+ // forest framing
+ for(let i=0;i<17;i++){let y=H*(.08+(i%7)*.12),sc=.48+(i%5)*.14;tree((i%2?W*.96:W*.04)+(i%3-1)*W*.035,y,sc,i%3?'#24533a':'#315f43');}
+ for(let i=0;i<24;i++){let side=i%2?1:-1,x=side*(W*.10+(i%5)*W*.035),y=H*(.28+(i%8)*.095);tree(x,y,.42+(i%4)*.12,i%3?'#356b45':'#1f4b36');}
+ // winding earthy path with perspective
+ path();ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#6e6548';ctx.lineWidth= W*.22;ctx.stroke();path();ctx.strokeStyle='#c9b58b';ctx.lineWidth=W*.195;ctx.stroke();path();ctx.strokeStyle='#e0cfaa';ctx.lineWidth=W*.16;ctx.stroke();
+ // path highlights and stones
+ for(let i=0;i<42;i++){let y=H*(.56+i*.011),x=W*(.49+Math.sin(i*.22)*(.02+i*.001));ctx.fillStyle=i%2?'#9d8a67':'#e6d7b8';ctx.beginPath();ctx.ellipse(x,y,2+i*.07,1+i*.025,-.2,0,Math.PI*2);ctx.fill();}
+ // glowing milestone markers
+ points.forEach((p,i)=>{let x=p.x*W,y=p.y*H,unlocked=i===0||completed[i-1],done=completed[i];ctx.save();ctx.shadowColor=done?'#f8e7a0':'#d9f5b5';ctx.shadowBlur=unlocked?18:3;ctx.fillStyle=done?'#f4d77c':unlocked?'#e5f5b7':'#9ca99a';ctx.beginPath();ctx.arc(x,y,Math.max(9,W*.014),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#244b39';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#244b39';ctx.font='bold '+Math.max(10,W*.014)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(done?'✓':String(i+1),x,y);if(selected===i){ctx.strokeStyle='#fff7cf';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,Math.max(16,W*.023),0,Math.PI*2);ctx.stroke();}ctx.restore();});
+ // foreground leaves
+ for(let i=0;i<18;i++){let side=i%2?1:-1,x=side*(W*.42+(i%4)*W*.025),y=H*(.82+(i%4)*.055);ctx.fillStyle=i%2?'#173e2c':'#24563a';ctx.beginPath();ctx.ellipse(x,y,18+i%4*4,7+i%3*3,side*.6,0,Math.PI*2);ctx.fill();}
+ if(!document.hidden)raf=requestAnimationFrame(draw);
+}
+function save(){try{localStorage.setItem('navV3Milestones',JSON.stringify(completed))}catch(e){}}
+function showDetail(i){const m=milestones[i],unlocked=i===0||completed[i-1],done=completed[i];document.getElementById('checkpoint-detail').innerHTML='<span class="pill">'+(done?'MILESTONE COMPLETE':unlocked?'CHECKPOINT '+(i+1)+' OF 5':'LOCKED CHECKPOINT')+'</span><h3>'+m.icon+' '+m.name+'</h3><p>'+m.desc+'</p><b style="font-size:12px">Your action</b><p>'+m.action+'</p><div class="resultbox"><b>Pause and reflect</b><p>'+m.activity+'</p></div>'+(done?'<span class="pill">✓ YOU HAVE EXPLORED THIS MILESTONE</span>':unlocked?'<button class="btn dark" onclick="window.navV3Complete('+i+')">Mark milestone complete →</button>':'<p>🔒 '+m.unlock+'</p>');document.getElementById('world-caption-title').textContent=m.icon+' '+m.name;document.getElementById('world-caption-text').textContent=m.subtitle;}
+function render(){const n=completed.filter(Boolean).length;document.getElementById('v3-count').textContent=n+' / 5 MILESTONES';document.getElementById('v3-progress').style.width=(n/5*100)+'%';document.getElementById('v3-percent').textContent=Math.round(n/5*100)+'% explored';document.getElementById('world-stage').textContent=n===5?'A NEW HORIZON':n===0?'THE BEGINNING':milestones[Math.min(n,4)].name.toUpperCase();document.getElementById('world-sub').textContent=n===5?'You have reached a new beginning.':n+' milestone'+(n===1?'':'s')+' completed. Keep exploring.';document.getElementById('checkpoint-list').innerHTML=milestones.map((m,i)=>{let unlocked=i===0||completed[i-1],done=completed[i];return '<button class="checkpoint-button '+(selected===i?'active':'')+'" '+(!unlocked?'disabled':'')+' onclick="window.navV3Select('+i+')"><span class="cp-icon">'+(done?'✅':unlocked?m.icon:'🔒')+'</span><span><b>'+m.name+'</b><small>'+m.subtitle+'</small></span><span class="cp-state">'+(done?'DONE':unlocked?'EXPLORE':'LOCKED')+'</span></button>'}).join('');showDetail(selected);draw(performance.now());}
+window.navV3Select=i=>{if(i>0&&!completed[i-1])return;selected=i;render();};
+window.navV3Complete=i=>{if(i>0&&!completed[i-1])return;completed[i]=true;save();selected=Math.min(i+1,4);render();};
+canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;let nearest=-1,d=.045;points.forEach((p,i)=>{let q=Math.hypot(x-p.x,y-p.y);if(q<d){d=q;nearest=i;}});if(nearest>=0)window.navV3Select(nearest);});
+window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!raf)raf=requestAnimationFrame(draw);else if(document.hidden){cancelAnimationFrame(raf);raf=0;}});
+resize();render();
 })();
 </script></body></html>
