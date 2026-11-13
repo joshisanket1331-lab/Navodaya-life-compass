@@ -33,7 +33,11 @@
 .journey-detail .btn{margin-top:8px}
 .journey-progress{height:7px;background:#dce5d9;border-radius:20px;overflow:hidden;margin:9px 0}
 .journey-progress span{display:block;height:100%;background:#205846;width:0;transition:width .3s}
-.world-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:#19342d;background:linear-gradient(145deg,#dbe9d9,#a9c8bd)}
+.world-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:#19342d;background:radial-gradient(ellipse at 78% 25%,#d9f4e9 0 5%,transparent 24%),linear-gradient(165deg,#8fb8a0 0%,#c4d8b5 48%,#668b62 100%);background-image:radial-gradient(ellipse at 78% 28%,#d9f4e9 0 4%,transparent 22%),linear-gradient(165deg,#8fb8a0 0%,#c4d8b5 48%,#668b62 100%)} 
+.world-fallback:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(72deg,transparent 0 9%,#214b3930 9.2% 10%,transparent 10.2% 18%),linear-gradient(90deg,#173e2b55,transparent 32%,transparent 70%,#173e2b55);pointer-events:none}
+.world-fallback:after{content:"";position:absolute;left:35%;bottom:-25%;width:34%;height:90%;background:#c9b58c;clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);transform:rotate(4deg);opacity:.95;pointer-events:none}
+.world-fallback .fallback-inner{position:relative;z-index:1;max-width:340px;background:#ffffffdc;padding:20px;border-radius:16px;box-shadow:0 10px 35px #183c2b35}
+
 .world-fallback .fallback-inner{max-width:340px;background:#ffffffdc;padding:20px;border-radius:16px}
 @media(max-width:650px){.journey-world{height:410px}.journey-below{grid-template-columns:1fr}.world-hint{top:auto;bottom:13px;right:12px}.world-caption{bottom:62px}}
 </style></head>
@@ -115,8 +119,9 @@ function toggleTask(i,v){tasks[i]=v;localStorage.setItem("navTasks",JSON.stringi
 function clearTasks(){tasks=[];localStorage.setItem("navTasks","[]");renderTasks();updateHome()}
 buildPrompts();updateHome();renderQ();
 </script>
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script>
+const THREE=window.THREE;
 (()=>{
  const canvas=document.getElementById('journey3d'), fallback=document.getElementById('world-fallback');
  const milestones=[
@@ -163,10 +168,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
   canvas.addEventListener('pointerdown',e=>{drag=true;prev={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId)});
   canvas.addEventListener('pointermove',e=>{if(drag){rotation+=(e.clientX-prev.x)*.003;camera.position.x=Math.sin(rotation)*5;camera.lookAt(0,0,-10);prev={x:e.clientX,y:e.clientY}}});
   canvas.addEventListener('pointerup',()=>drag=false);
-  canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(markerGroups,true);if(hits.length){let o=hits[0].object;while(o&&!Number.isInteger(o.userData.index))o=o.parent;if(o)selectCheckpoint(o.userData.index);}});
+  canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(markerGroups,true);if(hits.length){let o=hits[0].object;while(o&&!Number.isInteger(o.userData.index))o=o.parent;if(o)window.navV3Select(o.userData.index);}});
   function animate(t){requestAnimationFrame(animate);markerGroups.forEach((g,i)=>{g.children[2].position.y=1.2+Math.sin(t*.0018+i)*.12;g.children[1].material.emissiveIntensity=completed[i]?.15:.55+Math.sin(t*.002+i)*.2;});renderer.render(scene,camera);}
   animate(0);
- }catch(e){fallback.classList.remove('hide');}
+ }catch(e){
+  fallback.classList.remove('hide');
+  fallback.innerHTML='<div class="fallback-inner"><b>🌿 The Forest of Discovery</b><p>Your journey is ready. The 3D engine could not start on this browser, but all checkpoints and activities below are available. Try opening the app in Chrome with hardware acceleration enabled.</p></div>';
+ }
  function save(){localStorage.setItem('navV3Milestones',JSON.stringify(completed));}
  function render(){
   const n=completed.filter(Boolean).length;document.getElementById('v3-count').textContent=n+' / 5 MILESTONES';document.getElementById('v3-progress').style.width=(n/5*100)+'%';document.getElementById('v3-percent').textContent=Math.round(n/5*100)+'% explored';
